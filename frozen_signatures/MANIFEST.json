@@ -1,0 +1,4093 @@
+{
+  "stage": "0_freeze_signatures_round123_parallel",
+  "timestamp_utc": "2026-05-28T02:14:24+00:00",
+  "wall_time_seconds": 294.228416,
+  "software": {
+    "python_version": "3.11.9 (main, Oct  8 2025, 04:40:34) [GCC 13.3.0]",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "n_workers": 22,
+    "pandas": "2.3.3",
+    "numpy": "2.4.6",
+    "scipy": "1.13.1",
+    "blas_env": {
+      "OPENBLAS_NUM_THREADS": "(unset)",
+      "MKL_NUM_THREADS": "(unset)",
+      "OMP_NUM_THREADS": "(unset)",
+      "NUMEXPR_NUM_THREADS": "(unset)",
+      "BLIS_NUM_THREADS": "(unset)"
+    },
+    "mp_start_method": "fork",
+    "script_path": "./scripts/freeze_signatures.py",
+    "script_sha256": "d1619e203b341b18d19802f4577e559f290556681587c4e460f2af6a04a11c16"
+  },
+  "auxiliary_artifacts": [
+    {
+      "path": "scripts/download_gse.py",
+      "sha256": "8055be2079510ad9f735cb74eefe46b7481a70cdf5f53ae8c140dcfd72e9e34b",
+      "size_bytes": 4533
+    },
+    {
+      "path": "scripts/freeze_signatures.py",
+      "sha256": "d1619e203b341b18d19802f4577e559f290556681587c4e460f2af6a04a11c16",
+      "size_bytes": 31226
+    },
+    {
+      "path": "scripts/lock_protocol.py",
+      "sha256": "8733f318f8d6128154699e0a4d512ae89e197f02e6d433d49b9dbf9993bf5d3a",
+      "size_bytes": 2239
+    },
+    {
+      "path": "scripts/parse_gse_to_matrix.py",
+      "sha256": "1d6039d83fc65f4a141165c190fa98ca4ce2f8ea990cd61d23980c2841a65b36",
+      "size_bytes": 9178
+    },
+    {
+      "path": "scripts/score_external_cohort.py",
+      "sha256": "2d10e1123668af536340dbd4159606ab1f9cf110a68571c463e3c9fda017ec3d",
+      "size_bytes": 11891
+    },
+    {
+      "path": "scripts/verify_frozen.py",
+      "sha256": "475e2d8958e64e13b7f65e028a2b25277418377725a9a50777fe3505f285eb6d",
+      "size_bytes": 4573
+    }
+  ],
+  "source_files": {
+    "ccle_drug": {
+      "path": "./enrichment_test/ccle_drug_common_with_tcga.csv",
+      "sha256": "5c9921dba904c7cc46b44da0ee29ba8d1b4bfa6de0800ef5a6b685ff6dcc4e39"
+    },
+    "ccle_expression": {
+      "path": "./CCLE25Q3/OmicsExpressionTPMLogp1HumanProteinCodingGenes.csv",
+      "sha256": "9d7e64ebbcb2811fa5e0ecf56d952ee96ca9f1f2b6ead00bb17480c1c01848d1"
+    },
+    "ccle_model": {
+      "path": "./CCLE25Q3/Model.csv",
+      "sha256": "9dbb9de8805696c1345816ab07edd23fb4fd95e117739f3c5c3b1cf062c1233b"
+    },
+    "oncokb": {
+      "path": "./OncoKB/cancerGeneList.tsv",
+      "sha256": "d98b57a505cd3b34e39b6f11217c0e52914079c23f98eabfe1d76b6e2ad29d37"
+    },
+    "tcga_drug": {
+      "path": "./enrichment_test/tcga_drug_common_with_ccle.csv",
+      "sha256": "db643d3f61b830f391d60fe7b85d0f17b75e0ab93ca5c105cdddbf8bc31871d4"
+    }
+  },
+  "params": {
+    "strategies": [
+      {
+        "name": "quantile_30_oncokb_all",
+        "auc_q": 0.3,
+        "use_spearman": false,
+        "gene_filter": "oncokb_all"
+      },
+      {
+        "name": "quantile_20_protein",
+        "auc_q": 0.2,
+        "use_spearman": false,
+        "gene_filter": "protein_coding"
+      },
+      {
+        "name": "spearman_top20_oncokb",
+        "auc_q": 0.5,
+        "use_spearman": true,
+        "gene_filter": "oncokb_only"
+      }
+    ],
+    "MIN_CELL_LINES": 100,
+    "MIN_SAMPLES_PER_GROUP": 50,
+    "MIN_VALID_GENES": 5,
+    "QUANTILE_TOP_N": 30,
+    "SPEARMAN_TOP_N": 20,
+    "N_BOOTSTRAP": 100,
+    "BOOTSTRAP_SEED": 42,
+    "TOP2_POISON_DRUGS": [
+      "DOXORUBICIN",
+      "ETOPOSIDE"
+    ],
+    "round_1_fixes": [
+      "spearman_sign_corrected_neg_rho_to_sensitivity",
+      "deterministic_tie_break_by_gene_symbol",
+      "float_format_pinned_%.10g",
+      "direction_labels_sensitivity_resistance",
+      "pandas2x_compatible_groupby"
+    ],
+    "round_2": [
+      "bootstrap_jaccard_stability_100x",
+      "delta_dropoff_ratio"
+    ],
+    "round_3": [
+      "solid_only_pool_excluding_heme",
+      "TOP2_poison_consensus(Doxorubicin+Etoposide)"
+    ],
+    "parallel_backend": "multiprocessing.Pool(fork)"
+  },
+  "drug_column_collisions": [],
+  "drugs": [
+    {
+      "drug_norm": "CABOZANTINIB",
+      "tcga_name": "Cabozantinib"
+    },
+    {
+      "drug_norm": "CARBOPLATIN",
+      "tcga_name": "Carboplatin"
+    },
+    {
+      "drug_norm": "CYCLOPHOSPHAMIDE",
+      "tcga_name": "Cyclophosphamide"
+    },
+    {
+      "drug_norm": "DABRAFENIB",
+      "tcga_name": "Dabrafenib"
+    },
+    {
+      "drug_norm": "DACARBAZINE",
+      "tcga_name": "Dacarbazine"
+    },
+    {
+      "drug_norm": "DASATINIB",
+      "tcga_name": "Dasatinib"
+    },
+    {
+      "drug_norm": "DEXAMETHASONE",
+      "tcga_name": "Dexamethasone"
+    },
+    {
+      "drug_norm": "DOCETAXEL",
+      "tcga_name": "Docetaxel"
+    },
+    {
+      "drug_norm": "DOXORUBICIN",
+      "tcga_name": "Doxorubicin"
+    },
+    {
+      "drug_norm": "ERLOTINIB",
+      "tcga_name": "Erlotinib"
+    },
+    {
+      "drug_norm": "ETOPOSIDE",
+      "tcga_name": "Etoposide"
+    },
+    {
+      "drug_norm": "FLUOROURACIL",
+      "tcga_name": "Fluorouracil"
+    },
+    {
+      "drug_norm": "FULVESTRANT",
+      "tcga_name": "Fulvestrant"
+    },
+    {
+      "drug_norm": "GEFITINIB",
+      "tcga_name": "Gefitinib"
+    },
+    {
+      "drug_norm": "GEMCITABINE",
+      "tcga_name": "Gemcitabine"
+    },
+    {
+      "drug_norm": "IFOSFAMIDE",
+      "tcga_name": "Ifosfamide"
+    },
+    {
+      "drug_norm": "IMATINIB",
+      "tcga_name": "Imatinib"
+    },
+    {
+      "drug_norm": "LAPATINIB",
+      "tcga_name": "Lapatinib"
+    },
+    {
+      "drug_norm": "METHOTREXATE",
+      "tcga_name": "Methotrexate"
+    },
+    {
+      "drug_norm": "MITOMYCIN",
+      "tcga_name": "Mitomycin"
+    },
+    {
+      "drug_norm": "PACLITAXEL",
+      "tcga_name": "Paclitaxel"
+    },
+    {
+      "drug_norm": "PAZOPANIB",
+      "tcga_name": "Pazopanib"
+    },
+    {
+      "drug_norm": "PROCARBAZINE",
+      "tcga_name": "Procarbazine"
+    },
+    {
+      "drug_norm": "REGORAFENIB",
+      "tcga_name": "Regorafenib"
+    },
+    {
+      "drug_norm": "RIGOSERTIB",
+      "tcga_name": "rigosertib"
+    },
+    {
+      "drug_norm": "TEMSIROLIMUS",
+      "tcga_name": "Temsirolimus"
+    },
+    {
+      "drug_norm": "THALIDOMIDE",
+      "tcga_name": "Thalidomide"
+    },
+    {
+      "drug_norm": "TOPOTECAN",
+      "tcga_name": "Topotecan"
+    },
+    {
+      "drug_norm": "TRAMETINIB",
+      "tcga_name": "Trametinib"
+    },
+    {
+      "drug_norm": "VINCRISTINE",
+      "tcga_name": "Vincristine"
+    },
+    {
+      "drug_norm": "VORINOSTAT",
+      "tcga_name": "Vorinostat"
+    }
+  ],
+  "pan_cancer": {
+    "outputs": {
+      "quantile_30_oncokb_all": [
+        {
+          "drug_norm": "CABOZANTINIB",
+          "drug_ccle_col": "CABOZANTINIB (CTRP:660840)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 226,
+          "n_resistant_cells": 227,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.474014369239429,
+          "dropoff_ratio_resistance": 0.4266725631856811,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.14308426073131952,
+            "jaccard_res_median": 0.7647058823529411,
+            "jaccard_res_iqr": 0.1515151515151516,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/CABOZANTINIB.tsv",
+          "sha256": "4d6290a89b19a071505c2bb398f25a96f4176d53dbf7d3da5a2bdfa95e357401"
+        },
+        {
+          "drug_norm": "CARBOPLATIN",
+          "drug_ccle_col": "CARBOPLATIN (CTRP:26979)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 234,
+          "n_resistant_cells": 234,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5578429465230486,
+          "dropoff_ratio_resistance": 0.4846696463622879,
+          "stability": {
+            "jaccard_sens_median": 0.7647058823529411,
+            "jaccard_sens_iqr": 0.06378915202444613,
+            "jaccard_res_median": 0.7142857142857143,
+            "jaccard_res_iqr": 0.0980392156862745,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/CARBOPLATIN.tsv",
+          "sha256": "1c6755f32b72f293d005180137f18174df974bff3eb79109b774f2d274b5e282"
+        },
+        {
+          "drug_norm": "CYCLOPHOSPHAMIDE",
+          "drug_ccle_col": "CYCLOPHOSPHAMIDE (CTRP:32620)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 123,
+          "n_resistant_cells": 124,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.3442428469759915,
+          "dropoff_ratio_resistance": 0.459190858807773,
+          "stability": {
+            "jaccard_sens_median": 0.30434782608695654,
+            "jaccard_sens_iqr": 0.11363636363636365,
+            "jaccard_res_median": 0.2372448979591837,
+            "jaccard_res_iqr": 0.1278772378516624,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/CYCLOPHOSPHAMIDE.tsv",
+          "sha256": "6c47d15473bee914ebf958e8a4e79497a1f3c61f05008e46c56746f01504e797"
+        },
+        {
+          "drug_norm": "DABRAFENIB",
+          "drug_ccle_col": "DABRAFENIB (CTRP:687954)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 115,
+          "n_resistant_cells": 115,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.4287993450669165,
+          "dropoff_ratio_resistance": 0.46090472843235547,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.0980392156862745,
+            "jaccard_res_median": 0.6666666666666666,
+            "jaccard_res_iqr": 0.13533834586466165,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/DABRAFENIB.tsv",
+          "sha256": "d62a49f37719947a04b62fb6d57901e7c393056fca37d6e0f300cf5572d3e139"
+        },
+        {
+          "drug_norm": "DACARBAZINE",
+          "drug_ccle_col": "DACARBAZINE (CTRP:32622)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 232,
+          "n_resistant_cells": 234,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.502699026132838,
+          "dropoff_ratio_resistance": 0.6111368432179332,
+          "stability": {
+            "jaccard_sens_median": 0.8181818181818182,
+            "jaccard_sens_iqr": 0.05347593582887711,
+            "jaccard_res_median": 0.7647058823529411,
+            "jaccard_res_iqr": 0.05347593582887711,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/DACARBAZINE.tsv",
+          "sha256": "b90f07d8412afa7a452631a653a0f5b38b083c9a1ed8ab4ebef4c60b212e5a69"
+        },
+        {
+          "drug_norm": "DASATINIB",
+          "drug_ccle_col": "DASATINIB (CTRP:52882)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 235,
+          "n_resistant_cells": 235,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.4581838476438265,
+          "dropoff_ratio_resistance": 0.5535096488686861,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.0980392156862745,
+            "jaccard_res_median": 0.5,
+            "jaccard_res_iqr": 0.11553273427471117,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/DASATINIB.tsv",
+          "sha256": "960c986bb44c67fe0a87443cfb057d9c9c8e136d2c5437916e8ed66181f20f08"
+        },
+        {
+          "drug_norm": "DEXAMETHASONE",
+          "drug_ccle_col": "DEXAMETHASONE (CTRP:277354)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 227,
+          "n_resistant_cells": 227,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.49298372734382545,
+          "dropoff_ratio_resistance": 0.586945402655093,
+          "stability": {
+            "jaccard_sens_median": 0.7647058823529411,
+            "jaccard_sens_iqr": 0.1515151515151516,
+            "jaccard_res_median": 0.7142857142857143,
+            "jaccard_res_iqr": 0.10526913468089938,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/DEXAMETHASONE.tsv",
+          "sha256": "6240a4785ceaf1aeb7e27baebb66df2d9fcb2880162a0e91fe26beaba2bed3d6"
+        },
+        {
+          "drug_norm": "DOCETAXEL",
+          "drug_ccle_col": "DOCETAXEL (CTRP:660364)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 111,
+          "n_resistant_cells": 111,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6198889202815605,
+          "dropoff_ratio_resistance": 0.49549870039064936,
+          "stability": {
+            "jaccard_sens_median": 0.7647058823529411,
+            "jaccard_sens_iqr": 0.10389610389610393,
+            "jaccard_res_median": 0.7647058823529411,
+            "jaccard_res_iqr": 0.10389610389610393,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/DOCETAXEL.tsv",
+          "sha256": "b05dfac2ee75ce9f74d91aeb63a90a410f05564cb5381e0c53f01c9c39a4e375"
+        },
+        {
+          "drug_norm": "DOXORUBICIN",
+          "drug_ccle_col": "DOXORUBICIN (CTRP:36599)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 239,
+          "n_resistant_cells": 239,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5444435561562596,
+          "dropoff_ratio_resistance": 0.5622210120831833,
+          "stability": {
+            "jaccard_sens_median": 0.875,
+            "jaccard_sens_iqr": 0.05681818181818177,
+            "jaccard_res_median": 0.875,
+            "jaccard_res_iqr": 0.05681818181818177,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/DOXORUBICIN.tsv",
+          "sha256": "406601d8f7c050142ed81a45126e89e495a092f0142ac262bfefd600e75c7259"
+        },
+        {
+          "drug_norm": "ERLOTINIB",
+          "drug_ccle_col": "ERLOTINIB (CTRP:52928)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 233,
+          "n_resistant_cells": 233,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.2589914772828869,
+          "dropoff_ratio_resistance": 0.4320489991682271,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.0980392156862745,
+            "jaccard_res_median": 0.6666666666666666,
+            "jaccard_res_iqr": 0.13533834586466165,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/ERLOTINIB.tsv",
+          "sha256": "a01bed609574f3abd3d1fd76f515703695fd333ae43b4dfaf938eea2208a5852"
+        },
+        {
+          "drug_norm": "ETOPOSIDE",
+          "drug_ccle_col": "ETOPOSIDE (CTRP:48589)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 233,
+          "n_resistant_cells": 233,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5276656765472979,
+          "dropoff_ratio_resistance": 0.6130053542617034,
+          "stability": {
+            "jaccard_sens_median": 0.875,
+            "jaccard_sens_iqr": 0.05681818181818177,
+            "jaccard_res_median": 0.875,
+            "jaccard_res_iqr": 0.11730205278592365,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/ETOPOSIDE.tsv",
+          "sha256": "6edad220485571e298b136e70eb7e1fdd06ad3d1b72be82e21b95c37e2592e9d"
+        },
+        {
+          "drug_norm": "FLUOROURACIL",
+          "drug_ccle_col": "FLUOROURACIL (CTRP:25344)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 234,
+          "n_resistant_cells": 235,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5316562800892146,
+          "dropoff_ratio_resistance": 0.5084959004442212,
+          "stability": {
+            "jaccard_sens_median": 0.8181818181818182,
+            "jaccard_sens_iqr": 0.11029411764705888,
+            "jaccard_res_median": 0.7142857142857143,
+            "jaccard_res_iqr": 0.0980392156862745,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/FLUOROURACIL.tsv",
+          "sha256": "6547053163bed538b9617b244188f55f04694eaba55333c111120156f9ce4fa3"
+        },
+        {
+          "drug_norm": "FULVESTRANT",
+          "drug_ccle_col": "FULVESTRANT (CTRP:464880)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 60,
+          "n_resistant_cells": 60,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.3938349156098705,
+          "dropoff_ratio_resistance": 0.3806206096901369,
+          "stability": {
+            "jaccard_sens_median": 0.3953488372093023,
+            "jaccard_sens_iqr": 0.22340425531914893,
+            "jaccard_res_median": 0.3333333333333333,
+            "jaccard_res_iqr": 0.17085904129093496,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/FULVESTRANT.tsv",
+          "sha256": "53a17bef83e7d5965167c20719380a5488e7d241e6eea95bf5dd46bcbf0a64c6"
+        },
+        {
+          "drug_norm": "GEFITINIB",
+          "drug_ccle_col": "GEFITINIB (CTRP:52926)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 227,
+          "n_resistant_cells": 228,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.259387365716378,
+          "dropoff_ratio_resistance": 0.49526881549302537,
+          "stability": {
+            "jaccard_sens_median": 0.6666666666666666,
+            "jaccard_sens_iqr": 0.13533834586466165,
+            "jaccard_res_median": 0.6666666666666666,
+            "jaccard_res_iqr": 0.0926640926640927,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/GEFITINIB.tsv",
+          "sha256": "79c76db520629d09beebe8dd2e280459b7e1ea2d61a5dab504456b3424b36bbd"
+        },
+        {
+          "drug_norm": "GEMCITABINE",
+          "drug_ccle_col": "GEMCITABINE (CTRP:411863)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 214,
+          "n_resistant_cells": 214,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5211948512117763,
+          "dropoff_ratio_resistance": 0.5870533778253684,
+          "stability": {
+            "jaccard_sens_median": 0.8181818181818182,
+            "jaccard_sens_iqr": 0.11029411764705888,
+            "jaccard_res_median": 0.875,
+            "jaccard_res_iqr": 0.05681818181818177,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/GEMCITABINE.tsv",
+          "sha256": "f326ee69fd6b34d2f4e8efe3ce41163c33592e47eef7087878d32e8dbb15cf6b"
+        },
+        {
+          "drug_norm": "IFOSFAMIDE",
+          "drug_ccle_col": "IFOSFAMIDE (CTRP:35319)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 121,
+          "n_resistant_cells": 120,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5622237411620328,
+          "dropoff_ratio_resistance": 0.5876283241666667,
+          "stability": {
+            "jaccard_sens_median": 0.42857142857142855,
+            "jaccard_sens_iqr": 0.14393939393939392,
+            "jaccard_res_median": 0.445993031358885,
+            "jaccard_res_iqr": 0.2152496626180837,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/IFOSFAMIDE.tsv",
+          "sha256": "4fe5e407af70c0bfaf4e56f3e227b1776c6ff72fc6f3f8ac303c426b625ea222"
+        },
+        {
+          "drug_norm": "IMATINIB",
+          "drug_ccle_col": "IMATINIB (CTRP:345041)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 230,
+          "n_resistant_cells": 230,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.4686842214292936,
+          "dropoff_ratio_resistance": 0.5671989226100583,
+          "stability": {
+            "jaccard_sens_median": 0.7647058823529411,
+            "jaccard_sens_iqr": 0.10389610389610393,
+            "jaccard_res_median": 0.8181818181818182,
+            "jaccard_res_iqr": 0.05347593582887711,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/IMATINIB.tsv",
+          "sha256": "4b3ab33c8c341dff9b88fc1516e49d777a81a4fbc500d7ddc21250e342d2f672"
+        },
+        {
+          "drug_norm": "LAPATINIB",
+          "drug_ccle_col": "LAPATINIB (CTRP:634309)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 220,
+          "n_resistant_cells": 220,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.3660202956811568,
+          "dropoff_ratio_resistance": 0.477140140745925,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.0980392156862745,
+            "jaccard_res_median": 0.7142857142857143,
+            "jaccard_res_iqr": 0.0980392156862745,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/LAPATINIB.tsv",
+          "sha256": "38321d81831a81fcfc78ee17a71edf3c2b6d4070a253500ed9648b71b64688d5"
+        },
+        {
+          "drug_norm": "METHOTREXATE",
+          "drug_ccle_col": "METHOTREXATE (CTRP:30371)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 223,
+          "n_resistant_cells": 223,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.48562523792726786,
+          "dropoff_ratio_resistance": 0.6047431140985442,
+          "stability": {
+            "jaccard_sens_median": 0.7647058823529411,
+            "jaccard_sens_iqr": 0.10389610389610393,
+            "jaccard_res_median": 0.6666666666666666,
+            "jaccard_res_iqr": 0.0926640926640927,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/METHOTREXATE.tsv",
+          "sha256": "6c002587a898f85d81147497b39fe70a6da9fb8628978df2696ae501c2a06b85"
+        },
+        {
+          "drug_norm": "MITOMYCIN",
+          "drug_ccle_col": "MITOMYCIN (CTRP:50732)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 233,
+          "n_resistant_cells": 233,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5344891365460537,
+          "dropoff_ratio_resistance": 0.5216907942940405,
+          "stability": {
+            "jaccard_sens_median": 0.8181818181818182,
+            "jaccard_sens_iqr": 0.05681818181818177,
+            "jaccard_res_median": 0.7647058823529411,
+            "jaccard_res_iqr": 0.05347593582887711,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/MITOMYCIN.tsv",
+          "sha256": "52896bfe13e86d433cf52c6dcdcb4fc4b038b9355fbe4f675e98d40e60dd62cc"
+        },
+        {
+          "drug_norm": "PACLITAXEL",
+          "drug_ccle_col": "PACLITAXEL (CTRP:26956)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 230,
+          "n_resistant_cells": 230,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5095022582734496,
+          "dropoff_ratio_resistance": 0.5087353503188629,
+          "stability": {
+            "jaccard_sens_median": 0.875,
+            "jaccard_sens_iqr": 0.05681818181818177,
+            "jaccard_res_median": 0.8181818181818182,
+            "jaccard_res_iqr": 0.11029411764705888,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/PACLITAXEL.tsv",
+          "sha256": "63f7c31f917a4f6c10f5bcc2986c968d6c25e2b685f0f08d6cd3d667986a7e3c"
+        },
+        {
+          "drug_norm": "PAZOPANIB",
+          "drug_ccle_col": "PAZOPANIB (CTRP:640265)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 231,
+          "n_resistant_cells": 231,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.46326786211163307,
+          "dropoff_ratio_resistance": 0.5507198809743734,
+          "stability": {
+            "jaccard_sens_median": 0.7647058823529411,
+            "jaccard_sens_iqr": 0.10389610389610393,
+            "jaccard_res_median": 0.8181818181818182,
+            "jaccard_res_iqr": 0.05681818181818177,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/PAZOPANIB.tsv",
+          "sha256": "09a321ffc61661632f6136e846f100ee84593fa1db2287965a96c2848bcd9f2f"
+        },
+        {
+          "drug_norm": "PROCARBAZINE",
+          "drug_ccle_col": "PROCARBAZINE (CTRP:28183)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 216,
+          "n_resistant_cells": 215,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5504844902513284,
+          "dropoff_ratio_resistance": 0.2901112174333111,
+          "stability": {
+            "jaccard_sens_median": 0.36363636363636365,
+            "jaccard_sens_iqr": 0.15197568389057747,
+            "jaccard_res_median": 0.25,
+            "jaccard_res_iqr": 0.0798580301685892,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/PROCARBAZINE.tsv",
+          "sha256": "1de4195e677d3c52220825897662f495289d74be9c456ba66bc41e91b427923b"
+        },
+        {
+          "drug_norm": "REGORAFENIB",
+          "drug_ccle_col": "REGORAFENIB (CTRP:628613)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 224,
+          "n_resistant_cells": 224,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.44802950709624867,
+          "dropoff_ratio_resistance": 0.5456793176640486,
+          "stability": {
+            "jaccard_sens_median": 0.5789473684210527,
+            "jaccard_sens_iqr": 0.20325203252032514,
+            "jaccard_res_median": 0.6666666666666666,
+            "jaccard_res_iqr": 0.0926640926640927,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/REGORAFENIB.tsv",
+          "sha256": "abc1b817871b8956693260bb99734fcb45411acb9c9decaf2acf5e2deb1269ba"
+        },
+        {
+          "drug_norm": "RIGOSERTIB",
+          "drug_ccle_col": "RIGOSERTIB (CTRP:660397)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 223,
+          "n_resistant_cells": 223,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5095418038467773,
+          "dropoff_ratio_resistance": 0.5534459363343205,
+          "stability": {
+            "jaccard_sens_median": 0.8181818181818182,
+            "jaccard_sens_iqr": 0.11029411764705888,
+            "jaccard_res_median": 0.875,
+            "jaccard_res_iqr": 0.05681818181818177,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/RIGOSERTIB.tsv",
+          "sha256": "0fae65baeeb1b54a8be8fbd8667ea2464da980077b1fb10c41e6b26234992a3a"
+        },
+        {
+          "drug_norm": "TEMSIROLIMUS",
+          "drug_ccle_col": "TEMSIROLIMUS (CTRP:660358)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 124,
+          "n_resistant_cells": 124,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.4523894457030653,
+          "dropoff_ratio_resistance": 0.49781162539640106,
+          "stability": {
+            "jaccard_sens_median": 0.6904761904761905,
+            "jaccard_sens_iqr": 0.0980392156862745,
+            "jaccard_res_median": 0.7142857142857143,
+            "jaccard_res_iqr": 0.1114081996434938,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/TEMSIROLIMUS.tsv",
+          "sha256": "600b7e1a07de6d03cce199e44dcbf807a4ad0daee17a4d6f185d26ed06585c81"
+        },
+        {
+          "drug_norm": "THALIDOMIDE",
+          "drug_ccle_col": "THALIDOMIDE (CTRP:24197)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 114,
+          "n_resistant_cells": 114,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.39409829465772517,
+          "dropoff_ratio_resistance": 0.3967229555394209,
+          "stability": {
+            "jaccard_sens_median": 0.2765957446808511,
+            "jaccard_sens_iqr": 0.10884353741496597,
+            "jaccard_res_median": 0.3333333333333333,
+            "jaccard_res_iqr": 0.11875309252845123,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/THALIDOMIDE.tsv",
+          "sha256": "37f3eef52ce2e05f75e1f52e4bddfdfad3d7c8660878617610881115af0c8560"
+        },
+        {
+          "drug_norm": "TOP2_POISON_CONSENSUS",
+          "drug_ccle_col": null,
+          "n_up": 27,
+          "n_down": 28,
+          "n_input_drugs": 2,
+          "input_drugs": [
+            "DOXORUBICIN",
+            "ETOPOSIDE"
+          ],
+          "score_col": "mean_rank",
+          "stability": {
+            "jaccard_sens_median": 0.8477011494252873,
+            "jaccard_sens_iqr": 0.096551724137931,
+            "jaccard_res_median": 0.8333333333333334,
+            "jaccard_res_iqr": 0.09247311827956994,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/TOP2_POISON_CONSENSUS.tsv",
+          "sha256": "e7caada34d02601534c8e1d881fe25adfa80ad7b775b8b734e3847651250e408"
+        },
+        {
+          "drug_norm": "TOPOTECAN",
+          "drug_ccle_col": "TOPOTECAN (CTRP:44580)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 238,
+          "n_resistant_cells": 238,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5420830959470034,
+          "dropoff_ratio_resistance": 0.6070701848119963,
+          "stability": {
+            "jaccard_sens_median": 0.8181818181818182,
+            "jaccard_sens_iqr": 0.11029411764705888,
+            "jaccard_res_median": 0.9354838709677419,
+            "jaccard_res_iqr": 0.06048387096774188,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/TOPOTECAN.tsv",
+          "sha256": "f2d512485b982f02e2c002e940330fcab4fa6280d5a0a1fb66a500163396a174"
+        },
+        {
+          "drug_norm": "TRAMETINIB",
+          "drug_ccle_col": "TRAMETINIB (CTRP:687418)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 117,
+          "n_resistant_cells": 117,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.3659491143949665,
+          "dropoff_ratio_resistance": 0.3005085579138685,
+          "stability": {
+            "jaccard_sens_median": 0.5789473684210527,
+            "jaccard_sens_iqr": 0.1216216216216216,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.13076796308503624,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/TRAMETINIB.tsv",
+          "sha256": "9e75a345cb6d40fb35819470fe21b0466efcc911a045580087672c67d93d4c07"
+        },
+        {
+          "drug_norm": "VINCRISTINE",
+          "drug_ccle_col": "VINCRISTINE (CTRP:62602)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 242,
+          "n_resistant_cells": 242,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.4999893541003057,
+          "dropoff_ratio_resistance": 0.5523668223725829,
+          "stability": {
+            "jaccard_sens_median": 0.8181818181818182,
+            "jaccard_sens_iqr": 0.05681818181818177,
+            "jaccard_res_median": 0.9354838709677419,
+            "jaccard_res_iqr": 0.06048387096774188,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/VINCRISTINE.tsv",
+          "sha256": "b14433937c60f31f561ed9c205405b93307cec5c2acc73dd90258da2c197496c"
+        },
+        {
+          "drug_norm": "VORINOSTAT",
+          "drug_ccle_col": "VORINOSTAT (CTRP:56554)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 229,
+          "n_resistant_cells": 229,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.4826170324891404,
+          "dropoff_ratio_resistance": 0.4380046791809958,
+          "stability": {
+            "jaccard_sens_median": 0.875,
+            "jaccard_sens_iqr": 0.05681818181818177,
+            "jaccard_res_median": 0.875,
+            "jaccard_res_iqr": 0.05681818181818177,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_30_oncokb_all/VORINOSTAT.tsv",
+          "sha256": "94d887353d8d75581f70afdc8990e22660495b47a621927f220b20b41c3c82dc"
+        }
+      ],
+      "quantile_20_protein": [
+        {
+          "drug_norm": "CABOZANTINIB",
+          "drug_ccle_col": "CABOZANTINIB (CTRP:660840)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 151,
+          "n_resistant_cells": 151,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6529018992022059,
+          "dropoff_ratio_resistance": 0.704761677887353,
+          "stability": {
+            "jaccard_sens_median": 0.5,
+            "jaccard_sens_iqr": 0.12424353566843938,
+            "jaccard_res_median": 0.5789473684210527,
+            "jaccard_res_iqr": 0.09442134442134442,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/CABOZANTINIB.tsv",
+          "sha256": "fa68464c128af1c2851de067b7cc43db4a0a077461a0d63a0f6dddef89edbf0a"
+        },
+        {
+          "drug_norm": "CARBOPLATIN",
+          "drug_ccle_col": "CARBOPLATIN (CTRP:26979)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 156,
+          "n_resistant_cells": 156,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.7399588045080909,
+          "dropoff_ratio_resistance": 0.6926091588969047,
+          "stability": {
+            "jaccard_sens_median": 0.5789473684210527,
+            "jaccard_sens_iqr": 0.13288288288288286,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.11553273427471117,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/CARBOPLATIN.tsv",
+          "sha256": "5074fd293b4cea65a6caaea021f318ee353775b0019aa490e2ab0511b4c30ea0"
+        },
+        {
+          "drug_norm": "CYCLOPHOSPHAMIDE",
+          "drug_ccle_col": "CYCLOPHOSPHAMIDE (CTRP:32620)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 82,
+          "n_resistant_cells": 82,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5268430971751625,
+          "dropoff_ratio_resistance": 0.6511105475500439,
+          "stability": {
+            "jaccard_sens_median": 0.22448979591836735,
+            "jaccard_sens_iqr": 0.09615384615384615,
+            "jaccard_res_median": 0.15384615384615385,
+            "jaccard_res_iqr": 0.0888888888888889,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/CYCLOPHOSPHAMIDE.tsv",
+          "sha256": "658f0200352509694552ec77d90c58b02d346f348b3ebe34e99d510c053b8e2d"
+        },
+        {
+          "drug_norm": "DABRAFENIB",
+          "drug_ccle_col": "DABRAFENIB (CTRP:687954)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 77,
+          "n_resistant_cells": 77,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5764336632949505,
+          "dropoff_ratio_resistance": 0.7213803394930594,
+          "stability": {
+            "jaccard_sens_median": 0.4634146341463415,
+            "jaccard_sens_iqr": 0.14311270125223613,
+            "jaccard_res_median": 0.5789473684210527,
+            "jaccard_res_iqr": 0.23809523809523808,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/DABRAFENIB.tsv",
+          "sha256": "4513d9746aa3f84e9a8ad9527c5d6d1793175980d0f9946ba10e89c8e9ec51de"
+        },
+        {
+          "drug_norm": "DACARBAZINE",
+          "drug_ccle_col": "DACARBAZINE (CTRP:32622)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 155,
+          "n_resistant_cells": 156,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.7232883877442059,
+          "dropoff_ratio_resistance": 0.7568044979704918,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.0980392156862745,
+            "jaccard_res_median": 0.5789473684210527,
+            "jaccard_res_iqr": 0.1216216216216216,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/DACARBAZINE.tsv",
+          "sha256": "2195364ed98f542ea0889a275869128f854757b1f14040c5c0bde7f2d697a215"
+        },
+        {
+          "drug_norm": "DASATINIB",
+          "drug_ccle_col": "DASATINIB (CTRP:52882)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 157,
+          "n_resistant_cells": 157,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5908816100075399,
+          "dropoff_ratio_resistance": 0.7676778830974138,
+          "stability": {
+            "jaccard_sens_median": 0.5789473684210527,
+            "jaccard_sens_iqr": 0.08316008316008316,
+            "jaccard_res_median": 0.42857142857142855,
+            "jaccard_res_iqr": 0.13636363636363635,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/DASATINIB.tsv",
+          "sha256": "69c1b54fef3fa30d6b937e467e53660b5162e805cb8267071863af369c38830b"
+        },
+        {
+          "drug_norm": "DEXAMETHASONE",
+          "drug_ccle_col": "DEXAMETHASONE (CTRP:277354)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 152,
+          "n_resistant_cells": 152,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6252104201173887,
+          "dropoff_ratio_resistance": 0.7528020392923138,
+          "stability": {
+            "jaccard_sens_median": 0.6904761904761905,
+            "jaccard_sens_iqr": 0.14308426073131952,
+            "jaccard_res_median": 0.4634146341463415,
+            "jaccard_res_iqr": 0.10989010989010989,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/DEXAMETHASONE.tsv",
+          "sha256": "ac50c76130360c152c9b1bf9f174aab164c4fa794d517d435bb50d5b81e54a09"
+        },
+        {
+          "drug_norm": "DOCETAXEL",
+          "drug_ccle_col": "DOCETAXEL (CTRP:660364)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 74,
+          "n_resistant_cells": 74,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6598149594884319,
+          "dropoff_ratio_resistance": 0.7827151327588505,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.0980392156862745,
+            "jaccard_res_median": 0.6002844950213371,
+            "jaccard_res_iqr": 0.1282051282051282,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/DOCETAXEL.tsv",
+          "sha256": "49f2539718e69b7389f685004ff365cf01cc9a3396478d9a077e1cd119cee4b9"
+        },
+        {
+          "drug_norm": "DOXORUBICIN",
+          "drug_ccle_col": "DOXORUBICIN (CTRP:36599)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 160,
+          "n_resistant_cells": 160,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6567040129659563,
+          "dropoff_ratio_resistance": 0.711525281497596,
+          "stability": {
+            "jaccard_sens_median": 0.7647058823529411,
+            "jaccard_sens_iqr": 0.10389610389610393,
+            "jaccard_res_median": 0.7647058823529411,
+            "jaccard_res_iqr": 0.10389610389610393,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/DOXORUBICIN.tsv",
+          "sha256": "86b26a9fb0258c89d675d3216ed3b291060a8b227f15fd9768e8ff86bce58542"
+        },
+        {
+          "drug_norm": "ERLOTINIB",
+          "drug_ccle_col": "ERLOTINIB (CTRP:52928)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 155,
+          "n_resistant_cells": 155,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.73781550098904,
+          "dropoff_ratio_resistance": 0.5821906724438786,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.0980392156862745,
+            "jaccard_res_median": 0.5789473684210527,
+            "jaccard_res_iqr": 0.1216216216216216,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/ERLOTINIB.tsv",
+          "sha256": "9db065d8e6c93f69cb864aa203a965aee90759ff4f5bbbaa620803ca91b9c1ad"
+        },
+        {
+          "drug_norm": "ETOPOSIDE",
+          "drug_ccle_col": "ETOPOSIDE (CTRP:48589)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 156,
+          "n_resistant_cells": 156,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.7151911543440406,
+          "dropoff_ratio_resistance": 0.7113331986174809,
+          "stability": {
+            "jaccard_sens_median": 0.7647058823529411,
+            "jaccard_sens_iqr": 0.10389610389610393,
+            "jaccard_res_median": 0.7142857142857143,
+            "jaccard_res_iqr": 0.0980392156862745,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/ETOPOSIDE.tsv",
+          "sha256": "464198bbd304914989293f15aa04fec685a63b3172d7afb5b4066bae2a8832fb"
+        },
+        {
+          "drug_norm": "FLUOROURACIL",
+          "drug_ccle_col": "FLUOROURACIL (CTRP:25344)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 156,
+          "n_resistant_cells": 156,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.7106740873739663,
+          "dropoff_ratio_resistance": 0.6282749571999597,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.04761904761904767,
+            "jaccard_res_median": 0.6666666666666666,
+            "jaccard_res_iqr": 0.13533834586466165,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/FLUOROURACIL.tsv",
+          "sha256": "ca6f3f1da86b3bbfb73366907f119ba2ed10c9c0cd71c85b5aa1389ececb118d"
+        },
+        {
+          "drug_norm": "GEFITINIB",
+          "drug_ccle_col": "GEFITINIB (CTRP:52926)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 152,
+          "n_resistant_cells": 152,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6786717759167051,
+          "dropoff_ratio_resistance": 0.43601868688918943,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.0980392156862745,
+            "jaccard_res_median": 0.4817073170731707,
+            "jaccard_res_iqr": 0.10989010989010989,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/GEFITINIB.tsv",
+          "sha256": "631d7cf6eddbd3f4c8516dd8428f67fd3bc636c5a1ac2686538f2f9a7d75f550"
+        },
+        {
+          "drug_norm": "GEMCITABINE",
+          "drug_ccle_col": "GEMCITABINE (CTRP:411863)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 143,
+          "n_resistant_cells": 143,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6883745478814353,
+          "dropoff_ratio_resistance": 0.7633895124551242,
+          "stability": {
+            "jaccard_sens_median": 0.7647058823529411,
+            "jaccard_sens_iqr": 0.10389610389610393,
+            "jaccard_res_median": 0.7142857142857143,
+            "jaccard_res_iqr": 0.04761904761904767,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/GEMCITABINE.tsv",
+          "sha256": "0388192b5fc76f33b02cd7e7d1e55f9994c6b17bc13c0db2744caf30afa39ea5"
+        },
+        {
+          "drug_norm": "IFOSFAMIDE",
+          "drug_ccle_col": "IFOSFAMIDE (CTRP:35319)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 81,
+          "n_resistant_cells": 80,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6794306028797987,
+          "dropoff_ratio_resistance": 0.6147917537312464,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.14090909090909087,
+            "jaccard_res_median": 0.3953488372093023,
+            "jaccard_res_iqr": 0.2134146341463415,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/IFOSFAMIDE.tsv",
+          "sha256": "7d74828d802f513af515d95834d0a698c41b6cfc144583acfbdb0cb046ffc08b"
+        },
+        {
+          "drug_norm": "IMATINIB",
+          "drug_ccle_col": "IMATINIB (CTRP:345041)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 154,
+          "n_resistant_cells": 154,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6710662525989023,
+          "dropoff_ratio_resistance": 0.7305153658140637,
+          "stability": {
+            "jaccard_sens_median": 0.7394957983193278,
+            "jaccard_sens_iqr": 0.05042016806722682,
+            "jaccard_res_median": 0.5,
+            "jaccard_res_iqr": 0.10989010989010989,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/IMATINIB.tsv",
+          "sha256": "832250ce243069f9e4f4567d4e91445ea2e3f29f1e54ac13a59f90aa4b0bbd08"
+        },
+        {
+          "drug_norm": "LAPATINIB",
+          "drug_ccle_col": "LAPATINIB (CTRP:634309)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 147,
+          "n_resistant_cells": 147,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6508886539880349,
+          "dropoff_ratio_resistance": 0.4872298303233063,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.1158008658008659,
+            "jaccard_res_median": 0.6216216216216216,
+            "jaccard_res_iqr": 0.08771929824561397,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/LAPATINIB.tsv",
+          "sha256": "3c2105be22969ff06bded063a6cf9fe15b4d77a3cb61281fcd31a1b6f6bb8d2e"
+        },
+        {
+          "drug_norm": "METHOTREXATE",
+          "drug_ccle_col": "METHOTREXATE (CTRP:30371)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 149,
+          "n_resistant_cells": 149,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6567368249929431,
+          "dropoff_ratio_resistance": 0.7027471342520479,
+          "stability": {
+            "jaccard_sens_median": 0.6666666666666666,
+            "jaccard_sens_iqr": 0.10333265596423491,
+            "jaccard_res_median": 0.4634146341463415,
+            "jaccard_res_iqr": 0.1046511627906977,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/METHOTREXATE.tsv",
+          "sha256": "a5300c8fc97fb7b5d79f3ba022baaedd496a283e9fa669b2df1b75b1b7f30fb5"
+        },
+        {
+          "drug_norm": "MITOMYCIN",
+          "drug_ccle_col": "MITOMYCIN (CTRP:50732)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 156,
+          "n_resistant_cells": 156,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6648610886579511,
+          "dropoff_ratio_resistance": 0.7507030929971743,
+          "stability": {
+            "jaccard_sens_median": 0.7647058823529411,
+            "jaccard_sens_iqr": 0.10389610389610393,
+            "jaccard_res_median": 0.7142857142857143,
+            "jaccard_res_iqr": 0.04761904761904767,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/MITOMYCIN.tsv",
+          "sha256": "3ecc4b366851453d149ffd4ee960bf2399306382eb0d0c29a5c6c34790d43092"
+        },
+        {
+          "drug_norm": "PACLITAXEL",
+          "drug_ccle_col": "PACLITAXEL (CTRP:26956)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 154,
+          "n_resistant_cells": 154,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6952034484730112,
+          "dropoff_ratio_resistance": 0.7289529047519974,
+          "stability": {
+            "jaccard_sens_median": 0.8181818181818182,
+            "jaccard_sens_iqr": 0.11029411764705888,
+            "jaccard_res_median": 0.6666666666666666,
+            "jaccard_res_iqr": 0.05888030888030893,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/PACLITAXEL.tsv",
+          "sha256": "7f90d73fe1e2be1b758f9fda26a36bf357b8bc6e177b3c969a5585a11761a9c5"
+        },
+        {
+          "drug_norm": "PAZOPANIB",
+          "drug_ccle_col": "PAZOPANIB (CTRP:640265)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 154,
+          "n_resistant_cells": 155,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6928981259729169,
+          "dropoff_ratio_resistance": 0.723980923293487,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.14308426073131952,
+            "jaccard_res_median": 0.5789473684210527,
+            "jaccard_res_iqr": 0.08316008316008316,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/PAZOPANIB.tsv",
+          "sha256": "87122acb4014e509600d456e745d4386bfffe61128d01515e3ff2880bfbe130b"
+        },
+        {
+          "drug_norm": "PROCARBAZINE",
+          "drug_ccle_col": "PROCARBAZINE (CTRP:28183)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 144,
+          "n_resistant_cells": 144,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6266165619467308,
+          "dropoff_ratio_resistance": 0.6449116210151363,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.10012515644555695,
+            "jaccard_res_median": 0.2,
+            "jaccard_res_iqr": 0.07702119309262165,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/PROCARBAZINE.tsv",
+          "sha256": "d0e70b98bdab0fd749de6b4d8a661180430de606b1b9e9d8d9d11d739f0d610d"
+        },
+        {
+          "drug_norm": "REGORAFENIB",
+          "drug_ccle_col": "REGORAFENIB (CTRP:628613)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 150,
+          "n_resistant_cells": 150,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.7092193498195072,
+          "dropoff_ratio_resistance": 0.6470420612815518,
+          "stability": {
+            "jaccard_sens_median": 0.36363636363636365,
+            "jaccard_sens_iqr": 0.1868188894654904,
+            "jaccard_res_median": 0.5,
+            "jaccard_res_iqr": 0.12001156737998847,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/REGORAFENIB.tsv",
+          "sha256": "caedb16a4282bd16098a74ab2863e12741ed18ec5118c895ac38e8ccef56f093"
+        },
+        {
+          "drug_norm": "RIGOSERTIB",
+          "drug_ccle_col": "RIGOSERTIB (CTRP:660397)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 149,
+          "n_resistant_cells": 149,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6556780573017879,
+          "dropoff_ratio_resistance": 0.727228602269877,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.05042016806722682,
+            "jaccard_res_median": 0.7647058823529411,
+            "jaccard_res_iqr": 0.05042016806722682,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/RIGOSERTIB.tsv",
+          "sha256": "fc4f17e8bc57a3e960228648a76e8a8f2a75e8983e508bedb86d15eca7c39aee"
+        },
+        {
+          "drug_norm": "TEMSIROLIMUS",
+          "drug_ccle_col": "TEMSIROLIMUS (CTRP:660358)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 83,
+          "n_resistant_cells": 83,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6904392528431131,
+          "dropoff_ratio_resistance": 0.725152102066402,
+          "stability": {
+            "jaccard_sens_median": 0.6666666666666666,
+            "jaccard_sens_iqr": 0.05888030888030893,
+            "jaccard_res_median": 0.5789473684210527,
+            "jaccard_res_iqr": 0.1216216216216216,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/TEMSIROLIMUS.tsv",
+          "sha256": "478d95ac8d9175305e284032a4c454a14c4cee63a1aec4bfcac1acb7fa4a9274"
+        },
+        {
+          "drug_norm": "THALIDOMIDE",
+          "drug_ccle_col": "THALIDOMIDE (CTRP:24197)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 76,
+          "n_resistant_cells": 76,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6606863094082994,
+          "dropoff_ratio_resistance": 0.525650595892365,
+          "stability": {
+            "jaccard_sens_median": 0.15384615384615385,
+            "jaccard_sens_iqr": 0.1090909090909091,
+            "jaccard_res_median": 0.2,
+            "jaccard_res_iqr": 0.12274959083469722,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/THALIDOMIDE.tsv",
+          "sha256": "791f0d40699f5934ec19074007d5b0462582e6679c20f7b9d782821bd030e938"
+        },
+        {
+          "drug_norm": "TOP2_POISON_CONSENSUS",
+          "drug_ccle_col": null,
+          "n_up": 27,
+          "n_down": 26,
+          "n_input_drugs": 2,
+          "input_drugs": [
+            "DOXORUBICIN",
+            "ETOPOSIDE"
+          ],
+          "score_col": "mean_rank",
+          "stability": {
+            "jaccard_sens_median": 0.7333333333333333,
+            "jaccard_sens_iqr": 0.09965437788018439,
+            "jaccard_res_median": 0.7333333333333333,
+            "jaccard_res_iqr": 0.08756157635467987,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/TOP2_POISON_CONSENSUS.tsv",
+          "sha256": "b285db4a2e1c20e6a4a87c579cba0ae7c878561103bd5a10fbd1fc6cefd981ec"
+        },
+        {
+          "drug_norm": "TOPOTECAN",
+          "drug_ccle_col": "TOPOTECAN (CTRP:44580)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 159,
+          "n_resistant_cells": 159,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6670774779071976,
+          "dropoff_ratio_resistance": 0.7280840099292395,
+          "stability": {
+            "jaccard_sens_median": 0.7647058823529411,
+            "jaccard_sens_iqr": 0.06378915202444613,
+            "jaccard_res_median": 0.7394957983193278,
+            "jaccard_res_iqr": 0.06378915202444613,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/TOPOTECAN.tsv",
+          "sha256": "f818246155da5564f25e6f3a755bc912314100cf1b72579b5aebd99a42673dd1"
+        },
+        {
+          "drug_norm": "TRAMETINIB",
+          "drug_ccle_col": "TRAMETINIB (CTRP:687418)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 78,
+          "n_resistant_cells": 78,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.7215574902629928,
+          "dropoff_ratio_resistance": 0.5609990274030535,
+          "stability": {
+            "jaccard_sens_median": 0.4634146341463415,
+            "jaccard_sens_iqr": 0.1748251748251748,
+            "jaccard_res_median": 0.42857142857142855,
+            "jaccard_res_iqr": 0.13636363636363635,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/TRAMETINIB.tsv",
+          "sha256": "9cda66f4b85d9e5d767b2b52b2a4b55dd247aa9fcf21948ac45aa33c245c1f04"
+        },
+        {
+          "drug_norm": "VINCRISTINE",
+          "drug_ccle_col": "VINCRISTINE (CTRP:62602)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 161,
+          "n_resistant_cells": 161,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6844095484649221,
+          "dropoff_ratio_resistance": 0.7569489496028058,
+          "stability": {
+            "jaccard_sens_median": 0.8181818181818182,
+            "jaccard_sens_iqr": 0.11029411764705888,
+            "jaccard_res_median": 0.7647058823529411,
+            "jaccard_res_iqr": 0.10389610389610393,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/VINCRISTINE.tsv",
+          "sha256": "6c4a2961cd99b9ec80ba407ee9e95d0ef87ef0d63b6ad24b4914e244696bd7d2"
+        },
+        {
+          "drug_norm": "VORINOSTAT",
+          "drug_ccle_col": "VORINOSTAT (CTRP:56554)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 153,
+          "n_resistant_cells": 153,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.7055400169887049,
+          "dropoff_ratio_resistance": 0.7391355737187885,
+          "stability": {
+            "jaccard_sens_median": 0.8181818181818182,
+            "jaccard_sens_iqr": 0.05347593582887711,
+            "jaccard_res_median": 0.7647058823529411,
+            "jaccard_res_iqr": 0.05042016806722682,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/quantile_20_protein/VORINOSTAT.tsv",
+          "sha256": "0a7acfc4717bcb536c85618af4c25178f76e3725ec0e58cc151c0c389279a4e4"
+        }
+      ],
+      "spearman_top20_oncokb": [
+        {
+          "drug_norm": "CABOZANTINIB",
+          "drug_ccle_col": "CABOZANTINIB (CTRP:660840)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 752,
+          "n_resistant_cells": 752,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6309109097798595,
+          "dropoff_ratio_resistance": 0.689681392678396,
+          "stability": {
+            "jaccard_sens_median": 0.3793103448275862,
+            "jaccard_sens_iqr": 0.09523809523809523,
+            "jaccard_res_median": 0.6,
+            "jaccard_res_iqr": 0.1282051282051282,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/CABOZANTINIB.tsv",
+          "sha256": "0243fece3fda9fc8d4c5d2e2a84849e468644f2799202e6506196188be102a44"
+        },
+        {
+          "drug_norm": "CARBOPLATIN",
+          "drug_ccle_col": "CARBOPLATIN (CTRP:26979)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 780,
+          "n_resistant_cells": 780,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.7735105014899463,
+          "dropoff_ratio_resistance": 0.6996197013908982,
+          "stability": {
+            "jaccard_sens_median": 0.48148148148148145,
+            "jaccard_sens_iqr": 0.10989010989010989,
+            "jaccard_res_median": 0.6,
+            "jaccard_res_iqr": 0.1282051282051282,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/CARBOPLATIN.tsv",
+          "sha256": "0a7191be8473ee1f028a891f80d0616e400841384464d50b418647764104b5d4"
+        },
+        {
+          "drug_norm": "CYCLOPHOSPHAMIDE",
+          "drug_ccle_col": "CYCLOPHOSPHAMIDE (CTRP:32620)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 408,
+          "n_resistant_cells": 408,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5670273453413706,
+          "dropoff_ratio_resistance": 0.5993351726106078,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.12121212121212119,
+            "jaccard_res_median": 0.21212121212121213,
+            "jaccard_res_iqr": 0.11385199240986718,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/CYCLOPHOSPHAMIDE.tsv",
+          "sha256": "ae601ce67fc8d4e05d64319155795698f788f2a8c5791d804011371f21b2ad3a"
+        },
+        {
+          "drug_norm": "DABRAFENIB",
+          "drug_ccle_col": "DABRAFENIB (CTRP:687954)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 384,
+          "n_resistant_cells": 384,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5639096393606412,
+          "dropoff_ratio_resistance": 0.6794357009951116,
+          "stability": {
+            "jaccard_sens_median": 0.5384615384615384,
+            "jaccard_sens_iqr": 0.17142857142857143,
+            "jaccard_res_median": 0.48148148148148145,
+            "jaccard_res_iqr": 0.17142857142857143,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/DABRAFENIB.tsv",
+          "sha256": "028514522d2a952a30c52b3f6a23bdf736a01e55b16cce5ee61982069d86537e"
+        },
+        {
+          "drug_norm": "DACARBAZINE",
+          "drug_ccle_col": "DACARBAZINE (CTRP:32622)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 773,
+          "n_resistant_cells": 773,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6782399925885734,
+          "dropoff_ratio_resistance": 0.7632639098802618,
+          "stability": {
+            "jaccard_sens_median": 0.6,
+            "jaccard_sens_iqr": 0.1282051282051282,
+            "jaccard_res_median": 0.6666666666666666,
+            "jaccard_res_iqr": 0.1282051282051282,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/DACARBAZINE.tsv",
+          "sha256": "aceccd70a25310ebe87b2ffbdaca3389743fbfad0b71456d50e48c55636e998c"
+        },
+        {
+          "drug_norm": "DASATINIB",
+          "drug_ccle_col": "DASATINIB (CTRP:52882)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 783,
+          "n_resistant_cells": 783,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5132092233004323,
+          "dropoff_ratio_resistance": 0.6009964118557329,
+          "stability": {
+            "jaccard_sens_median": 0.6666666666666666,
+            "jaccard_sens_iqr": 0.06666666666666665,
+            "jaccard_res_median": 0.48148148148148145,
+            "jaccard_res_iqr": 0.10989010989010989,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/DASATINIB.tsv",
+          "sha256": "53d08813fa3e9aec123d4faaed40bce2e6bc0208e8d6ad32ae8e78433625ba83"
+        },
+        {
+          "drug_norm": "DEXAMETHASONE",
+          "drug_ccle_col": "DEXAMETHASONE (CTRP:277354)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 757,
+          "n_resistant_cells": 757,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6292971594209559,
+          "dropoff_ratio_resistance": 0.7485293043991129,
+          "stability": {
+            "jaccard_sens_median": 0.48148148148148145,
+            "jaccard_sens_iqr": 0.17142857142857143,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.17142857142857143,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/DEXAMETHASONE.tsv",
+          "sha256": "8116443b40f61ebd634505221e563642e8745c05c6503d16d2677cea9db25e53"
+        },
+        {
+          "drug_norm": "DOCETAXEL",
+          "drug_ccle_col": "DOCETAXEL (CTRP:660364)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 370,
+          "n_resistant_cells": 370,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.77910232833302,
+          "dropoff_ratio_resistance": 0.7699987111002907,
+          "stability": {
+            "jaccard_sens_median": 0.5384615384615384,
+            "jaccard_sens_iqr": 0.11851851851851852,
+            "jaccard_res_median": 0.6,
+            "jaccard_res_iqr": 0.08205128205128209,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/DOCETAXEL.tsv",
+          "sha256": "6ceafb578ce335cc33c5f6207bd62e3ae7af1bfdca0d8fd84cdcbbdadd735a2f"
+        },
+        {
+          "drug_norm": "DOXORUBICIN",
+          "drug_ccle_col": "DOXORUBICIN (CTRP:36599)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 797,
+          "n_resistant_cells": 797,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6281243301173544,
+          "dropoff_ratio_resistance": 0.7091217920230084,
+          "stability": {
+            "jaccard_sens_median": 0.7391304347826086,
+            "jaccard_sens_iqr": 0.07246376811594202,
+            "jaccard_res_median": 0.8181818181818182,
+            "jaccard_res_iqr": 0.08658008658008653,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/DOXORUBICIN.tsv",
+          "sha256": "4546b3600d4af18deb23d1a78c7c0a4af2a730af4a707be819ca3729c2db5fa6"
+        },
+        {
+          "drug_norm": "ERLOTINIB",
+          "drug_ccle_col": "ERLOTINIB (CTRP:52928)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 775,
+          "n_resistant_cells": 775,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.47811515093019313,
+          "dropoff_ratio_resistance": 0.6385681549844613,
+          "stability": {
+            "jaccard_sens_median": 0.6,
+            "jaccard_sens_iqr": 0.1282051282051282,
+            "jaccard_res_median": 0.42857142857142855,
+            "jaccard_res_iqr": 0.15915119363395225,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/ERLOTINIB.tsv",
+          "sha256": "c23b48f984c61f8015c525c40e56a669f73b105914d87768156f2eb946981a70"
+        },
+        {
+          "drug_norm": "ETOPOSIDE",
+          "drug_ccle_col": "ETOPOSIDE (CTRP:48589)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 777,
+          "n_resistant_cells": 777,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6543878500899575,
+          "dropoff_ratio_resistance": 0.7315274144527611,
+          "stability": {
+            "jaccard_sens_median": 0.6666666666666666,
+            "jaccard_sens_iqr": 0.07246376811594202,
+            "jaccard_res_median": 0.8181818181818182,
+            "jaccard_res_iqr": 0.07905138339920958,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/ETOPOSIDE.tsv",
+          "sha256": "daba5e811bc30c5c86e71421225089afddb12911c5985bc0210250bdf7c11203"
+        },
+        {
+          "drug_norm": "FLUOROURACIL",
+          "drug_ccle_col": "FLUOROURACIL (CTRP:25344)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 779,
+          "n_resistant_cells": 779,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5579561294795726,
+          "dropoff_ratio_resistance": 0.7264624357035976,
+          "stability": {
+            "jaccard_sens_median": 0.6,
+            "jaccard_sens_iqr": 0.1282051282051282,
+            "jaccard_res_median": 0.7391304347826086,
+            "jaccard_res_iqr": 0.1515151515151516,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/FLUOROURACIL.tsv",
+          "sha256": "c9ced0fab2aca7ed7c678ce1c333a38ecc56aafd352c6e62218c1c11754054a4"
+        },
+        {
+          "drug_norm": "FULVESTRANT",
+          "drug_ccle_col": "FULVESTRANT (CTRP:464880)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 200,
+          "n_resistant_cells": 200,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6891544768503411,
+          "dropoff_ratio_resistance": 0.5412736034649366,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.1301247771836007,
+            "jaccard_res_median": 0.2903225806451613,
+            "jaccard_res_iqr": 0.08333333333333331,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/FULVESTRANT.tsv",
+          "sha256": "e90546234cd1dd0ee6179649a0f4abf94d9ecf9b7d95d76bd17dd88c42be8340"
+        },
+        {
+          "drug_norm": "GEFITINIB",
+          "drug_ccle_col": "GEFITINIB (CTRP:52926)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 756,
+          "n_resistant_cells": 756,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.44111501023346394,
+          "dropoff_ratio_resistance": 0.6137275093762422,
+          "stability": {
+            "jaccard_sens_median": 0.6,
+            "jaccard_sens_iqr": 0.1282051282051282,
+            "jaccard_res_median": 0.48148148148148145,
+            "jaccard_res_iqr": 0.10989010989010989,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/GEFITINIB.tsv",
+          "sha256": "9951129612c181525dad7f61dfc78dc0cf3f3e76adb7d0c528e4d4e7b54e7aad"
+        },
+        {
+          "drug_norm": "GEMCITABINE",
+          "drug_ccle_col": "GEMCITABINE (CTRP:411863)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 714,
+          "n_resistant_cells": 714,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6976757915455132,
+          "dropoff_ratio_resistance": 0.8090935698707096,
+          "stability": {
+            "jaccard_sens_median": 0.6666666666666666,
+            "jaccard_sens_iqr": 0.13913043478260867,
+            "jaccard_res_median": 0.7391304347826086,
+            "jaccard_res_iqr": 0.07905138339920958,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/GEMCITABINE.tsv",
+          "sha256": "bafa3ee2020d96201bfe072e53efe6b6cc0fece03c38ef5392fb6e12e4b35106"
+        },
+        {
+          "drug_norm": "IFOSFAMIDE",
+          "drug_ccle_col": "IFOSFAMIDE (CTRP:35319)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 398,
+          "n_resistant_cells": 398,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.7166384286273568,
+          "dropoff_ratio_resistance": 0.619975818697881,
+          "stability": {
+            "jaccard_sens_median": 0.3333333333333333,
+            "jaccard_sens_iqr": 0.17857142857142855,
+            "jaccard_res_median": 0.2903225806451613,
+            "jaccard_res_iqr": 0.08333333333333331,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/IFOSFAMIDE.tsv",
+          "sha256": "07847ca01b7fb663beb2de6d8e79d224d80c6a9c5637c85b714963d5dcb4d62e"
+        },
+        {
+          "drug_norm": "IMATINIB",
+          "drug_ccle_col": "IMATINIB (CTRP:345041)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 766,
+          "n_resistant_cells": 766,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6873469252493603,
+          "dropoff_ratio_resistance": 0.760891826168991,
+          "stability": {
+            "jaccard_sens_median": 0.5692307692307692,
+            "jaccard_sens_iqr": 0.11851851851851852,
+            "jaccard_res_median": 0.6,
+            "jaccard_res_iqr": 0.1282051282051282,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/IMATINIB.tsv",
+          "sha256": "a6816b323d873bd96318eaba0f10cfbc1c48d73e101fdb3fe81321bdd2c8cab8"
+        },
+        {
+          "drug_norm": "LAPATINIB",
+          "drug_ccle_col": "LAPATINIB (CTRP:634309)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 731,
+          "n_resistant_cells": 731,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5360082620051669,
+          "dropoff_ratio_resistance": 0.7222470770968578,
+          "stability": {
+            "jaccard_sens_median": 0.6666666666666666,
+            "jaccard_sens_iqr": 0.13913043478260867,
+            "jaccard_res_median": 0.6666666666666666,
+            "jaccard_res_iqr": 0.13913043478260867,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/LAPATINIB.tsv",
+          "sha256": "3b922b924f5f009aab516d67bec847ef44ab7f3bbad48ca313884b4a6e7af5a1"
+        },
+        {
+          "drug_norm": "METHOTREXATE",
+          "drug_ccle_col": "METHOTREXATE (CTRP:30371)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 743,
+          "n_resistant_cells": 743,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6191251722092064,
+          "dropoff_ratio_resistance": 0.7985385329854061,
+          "stability": {
+            "jaccard_sens_median": 0.6,
+            "jaccard_sens_iqr": 0.1282051282051282,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.17142857142857143,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/METHOTREXATE.tsv",
+          "sha256": "2bedbaba5b46db6270d433a09b189f246b77e7bd028bf922e5b3c23be726ee7f"
+        },
+        {
+          "drug_norm": "MITOMYCIN",
+          "drug_ccle_col": "MITOMYCIN (CTRP:50732)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 776,
+          "n_resistant_cells": 776,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.641526323657896,
+          "dropoff_ratio_resistance": 0.7923084225424074,
+          "stability": {
+            "jaccard_sens_median": 0.6,
+            "jaccard_sens_iqr": 0.1282051282051282,
+            "jaccard_res_median": 0.8181818181818182,
+            "jaccard_res_iqr": 0.07905138339920958,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/MITOMYCIN.tsv",
+          "sha256": "a479b7e739f37a8b02b11af072e35053e2a3ff6132960927721dc54a37e287fc"
+        },
+        {
+          "drug_norm": "PACLITAXEL",
+          "drug_ccle_col": "PACLITAXEL (CTRP:26956)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 766,
+          "n_resistant_cells": 766,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6565155269621565,
+          "dropoff_ratio_resistance": 0.7476176322908187,
+          "stability": {
+            "jaccard_sens_median": 0.5692307692307692,
+            "jaccard_sens_iqr": 0.07578347578347577,
+            "jaccard_res_median": 0.7391304347826086,
+            "jaccard_res_iqr": 0.07905138339920958,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/PACLITAXEL.tsv",
+          "sha256": "544ca89fc8be11fa9cc650711c852b3c1e4b304b4acc80e621c78956840c797d"
+        },
+        {
+          "drug_norm": "PAZOPANIB",
+          "drug_ccle_col": "PAZOPANIB (CTRP:640265)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 770,
+          "n_resistant_cells": 770,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6724016582801274,
+          "dropoff_ratio_resistance": 0.7412137451729951,
+          "stability": {
+            "jaccard_sens_median": 0.5384615384615384,
+            "jaccard_sens_iqr": 0.11851851851851852,
+            "jaccard_res_median": 0.7391304347826086,
+            "jaccard_res_iqr": 0.1515151515151516,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/PAZOPANIB.tsv",
+          "sha256": "39378df505eea94f30d7aace8705b3b23b7173fe543079a952b3cd81f76d9731"
+        },
+        {
+          "drug_norm": "PROCARBAZINE",
+          "drug_ccle_col": "PROCARBAZINE (CTRP:28183)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 717,
+          "n_resistant_cells": 717,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5538396751812468,
+          "dropoff_ratio_resistance": 0.5863757122811109,
+          "stability": {
+            "jaccard_sens_median": 0.2701612903225806,
+            "jaccard_sens_iqr": 0.12121212121212119,
+            "jaccard_res_median": 0.25,
+            "jaccard_res_iqr": 0.11385199240986718,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/PROCARBAZINE.tsv",
+          "sha256": "3b8b927b730ad79aa4f7f406d55146b36846e706e41bb787486ee6a2b7dac3b8"
+        },
+        {
+          "drug_norm": "REGORAFENIB",
+          "drug_ccle_col": "REGORAFENIB (CTRP:628613)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 746,
+          "n_resistant_cells": 746,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6296439164904795,
+          "dropoff_ratio_resistance": 0.696040243688713,
+          "stability": {
+            "jaccard_sens_median": 0.42857142857142855,
+            "jaccard_sens_iqr": 0.1164161508989095,
+            "jaccard_res_median": 0.6,
+            "jaccard_res_iqr": 0.18518518518518517,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/REGORAFENIB.tsv",
+          "sha256": "c1f5bb52f17704cfbe0a38efb30da88805c10f02a60d44e7069972ab95277b6c"
+        },
+        {
+          "drug_norm": "RIGOSERTIB",
+          "drug_ccle_col": "RIGOSERTIB (CTRP:660397)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 744,
+          "n_resistant_cells": 744,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6764615798839041,
+          "dropoff_ratio_resistance": 0.808427891596478,
+          "stability": {
+            "jaccard_sens_median": 0.6666666666666666,
+            "jaccard_sens_iqr": 0.13913043478260867,
+            "jaccard_res_median": 0.8181818181818182,
+            "jaccard_res_iqr": 0.16563146997929612,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/RIGOSERTIB.tsv",
+          "sha256": "d784a440f3bcac5ed34f9d7972dfc8f2178b56146313f62c1211ec8069934994"
+        },
+        {
+          "drug_norm": "TEMSIROLIMUS",
+          "drug_ccle_col": "TEMSIROLIMUS (CTRP:660358)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 411,
+          "n_resistant_cells": 411,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6986175645938328,
+          "dropoff_ratio_resistance": 0.688641554021619,
+          "stability": {
+            "jaccard_sens_median": 0.5384615384615384,
+            "jaccard_sens_iqr": 0.11851851851851852,
+            "jaccard_res_median": 0.6,
+            "jaccard_res_iqr": 0.1282051282051282,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/TEMSIROLIMUS.tsv",
+          "sha256": "6549aa5bc4663b796eaeeb7456b9114ad1a4b7227a12dd956c53bdb51e11353b"
+        },
+        {
+          "drug_norm": "THALIDOMIDE",
+          "drug_ccle_col": "THALIDOMIDE (CTRP:24197)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 380,
+          "n_resistant_cells": 380,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.7364781133250797,
+          "dropoff_ratio_resistance": 0.35668220489137165,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.07820136852394918,
+            "jaccard_res_median": 0.3333333333333333,
+            "jaccard_res_iqr": 0.14832949308755755,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/THALIDOMIDE.tsv",
+          "sha256": "701a0ed78107bb9c0cc0e6a0d19ef3b2989bc4ab67edf5234fefe803e019ffd0"
+        },
+        {
+          "drug_norm": "TOP2_POISON_CONSENSUS",
+          "drug_ccle_col": null,
+          "n_up": 17,
+          "n_down": 18,
+          "n_input_drugs": 2,
+          "input_drugs": [
+            "DOXORUBICIN",
+            "ETOPOSIDE"
+          ],
+          "score_col": "mean_rank",
+          "stability": {
+            "jaccard_sens_median": 0.6842105263157895,
+            "jaccard_sens_iqr": 0.11779448621553879,
+            "jaccard_res_median": 0.8,
+            "jaccard_res_iqr": 0.09941520467836251,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/TOP2_POISON_CONSENSUS.tsv",
+          "sha256": "3d18c79510a59c7be8ac96e1a3f8fe624bcc05a3444ef5e085dccbfe8c3671cc"
+        },
+        {
+          "drug_norm": "TOPOTECAN",
+          "drug_ccle_col": "TOPOTECAN (CTRP:44580)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 791,
+          "n_resistant_cells": 791,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6742370256214063,
+          "dropoff_ratio_resistance": 0.749580041928975,
+          "stability": {
+            "jaccard_sens_median": 0.6,
+            "jaccard_sens_iqr": 0.06666666666666665,
+            "jaccard_res_median": 0.8181818181818182,
+            "jaccard_res_iqr": 0.16563146997929612,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/TOPOTECAN.tsv",
+          "sha256": "e854c4b47058f8e92ac6b3177fff26b3135f681928a34eaf44d87a45ab916c4d"
+        },
+        {
+          "drug_norm": "TRAMETINIB",
+          "drug_ccle_col": "TRAMETINIB (CTRP:687418)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 389,
+          "n_resistant_cells": 389,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.3082473887470013,
+          "dropoff_ratio_resistance": 0.7825186927770359,
+          "stability": {
+            "jaccard_sens_median": 0.5692307692307692,
+            "jaccard_sens_iqr": 0.18518518518518517,
+            "jaccard_res_median": 0.42857142857142855,
+            "jaccard_res_iqr": 0.14814814814814814,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/TRAMETINIB.tsv",
+          "sha256": "4d52df9f252fb588acd2ab7265c172654f4174296d95e7d77fca558e88bf2c87"
+        },
+        {
+          "drug_norm": "VINCRISTINE",
+          "drug_ccle_col": "VINCRISTINE (CTRP:62602)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 805,
+          "n_resistant_cells": 805,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.6759694071094192,
+          "dropoff_ratio_resistance": 0.7542162686670429,
+          "stability": {
+            "jaccard_sens_median": 0.6666666666666666,
+            "jaccard_sens_iqr": 0.13913043478260867,
+            "jaccard_res_median": 0.8181818181818182,
+            "jaccard_res_iqr": 0.16563146997929612,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/VINCRISTINE.tsv",
+          "sha256": "193f645fae2285a39849a7af6777c69d49a0b15c0040dc5ac23e6ae35979fe5a"
+        },
+        {
+          "drug_norm": "VORINOSTAT",
+          "drug_ccle_col": "VORINOSTAT (CTRP:56554)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 762,
+          "n_resistant_cells": 762,
+          "n_cell_lines_used": 823,
+          "dropoff_ratio_sensitivity": 0.5936671361399504,
+          "dropoff_ratio_resistance": 0.7510639128257006,
+          "stability": {
+            "jaccard_sens_median": 0.6666666666666666,
+            "jaccard_sens_iqr": 0.06666666666666665,
+            "jaccard_res_median": 0.8181818181818182,
+            "jaccard_res_iqr": 0.10069640504423116,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/spearman_top20_oncokb/VORINOSTAT.tsv",
+          "sha256": "8edd65882a54c28233d4008c58618dbebc992e5ab5131040269a0a929288728f"
+        }
+      ]
+    },
+    "skipped_drugs": [
+      {
+        "drug_norm": "FULVESTRANT",
+        "strategy": "quantile_20_protein",
+        "reason": "too_few_per_group(40,40)"
+      }
+    ]
+  },
+  "solid_only": {
+    "outputs": {
+      "quantile_30_oncokb_all": [
+        {
+          "drug_norm": "CABOZANTINIB",
+          "drug_ccle_col": "CABOZANTINIB (CTRP:660840)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 187,
+          "n_resistant_cells": 187,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.4133443312458491,
+          "dropoff_ratio_resistance": 0.28231839804018793,
+          "stability": {
+            "jaccard_sens_median": 0.5,
+            "jaccard_sens_iqr": 0.14311270125223613,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.1216216216216216,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/CABOZANTINIB.tsv",
+          "sha256": "ef4a2c68386e9f6c3f2058d42fa716cb74260227bb3a7f3bee716fc60c6bdd37"
+        },
+        {
+          "drug_norm": "CARBOPLATIN",
+          "drug_ccle_col": "CARBOPLATIN (CTRP:26979)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 191,
+          "n_resistant_cells": 204,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.3879818286341286,
+          "dropoff_ratio_resistance": 0.3710246986527728,
+          "stability": {
+            "jaccard_sens_median": 0.37949260042283295,
+            "jaccard_sens_iqr": 0.124223602484472,
+            "jaccard_res_median": 0.3953488372093023,
+            "jaccard_res_iqr": 0.13008130081300817,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/CARBOPLATIN.tsv",
+          "sha256": "1e446e32486f799e7d193b6869d61d7d4b8d51b87a3cdd08bc5e112656982ade"
+        },
+        {
+          "drug_norm": "CYCLOPHOSPHAMIDE",
+          "drug_ccle_col": "CYCLOPHOSPHAMIDE (CTRP:32620)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 97,
+          "n_resistant_cells": 97,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.3044165266057552,
+          "dropoff_ratio_resistance": 0.4984475618740328,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.08710440698018337,
+            "jaccard_res_median": 0.2,
+            "jaccard_res_iqr": 0.07352941176470587,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/CYCLOPHOSPHAMIDE.tsv",
+          "sha256": "226b0361b2f3d6300d486c4cf1a80953a8cc4926996fb5a8c0b09a26627cc0ce"
+        },
+        {
+          "drug_norm": "DABRAFENIB",
+          "drug_ccle_col": "DABRAFENIB (CTRP:687954)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 99,
+          "n_resistant_cells": 99,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.3618598069543928,
+          "dropoff_ratio_resistance": 0.33200200469922636,
+          "stability": {
+            "jaccard_sens_median": 0.4634146341463415,
+            "jaccard_sens_iqr": 0.11426654740608228,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.1216216216216216,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/DABRAFENIB.tsv",
+          "sha256": "70d4c0ee629677444a996377b96b911914af405610e387e0eb7c5f207d2d3a52"
+        },
+        {
+          "drug_norm": "DACARBAZINE",
+          "drug_ccle_col": "DACARBAZINE (CTRP:32622)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 191,
+          "n_resistant_cells": 190,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.25731370661522474,
+          "dropoff_ratio_resistance": 0.4288229426468228,
+          "stability": {
+            "jaccard_sens_median": 0.2765957446808511,
+            "jaccard_sens_iqr": 0.0798580301685892,
+            "jaccard_res_median": 0.29047178538390384,
+            "jaccard_res_iqr": 0.08333333333333331,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/DACARBAZINE.tsv",
+          "sha256": "0e88842adaf6f5ef634401e534edcd7fec162c654e269760bfe99ba5fc0f8ca8"
+        },
+        {
+          "drug_norm": "DASATINIB",
+          "drug_ccle_col": "DASATINIB (CTRP:52882)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 192,
+          "n_resistant_cells": 192,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.41993932712522114,
+          "dropoff_ratio_resistance": 0.5975204422859447,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.0980392156862745,
+            "jaccard_res_median": 0.5789473684210527,
+            "jaccard_res_iqr": 0.08316008316008316,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/DASATINIB.tsv",
+          "sha256": "57938ff6fed909904f0c64cb2ba9c607ea2e979cff4d7df9615e6cfb6433c549"
+        },
+        {
+          "drug_norm": "DEXAMETHASONE",
+          "drug_ccle_col": "DEXAMETHASONE (CTRP:277354)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 186,
+          "n_resistant_cells": 186,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.4201175105429612,
+          "dropoff_ratio_resistance": 0.46449485868819623,
+          "stability": {
+            "jaccard_sens_median": 0.3333333333333333,
+            "jaccard_sens_iqr": 0.11875309252845123,
+            "jaccard_res_median": 0.36363636363636365,
+            "jaccard_res_iqr": 0.124223602484472,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/DEXAMETHASONE.tsv",
+          "sha256": "81d119809d5ef271a203fd6e0988cb75395e76d24193beb52f79d7c5154bf176"
+        },
+        {
+          "drug_norm": "DOCETAXEL",
+          "drug_ccle_col": "DOCETAXEL (CTRP:660364)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 93,
+          "n_resistant_cells": 93,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.42008645700794794,
+          "dropoff_ratio_resistance": 0.42097243755818525,
+          "stability": {
+            "jaccard_sens_median": 0.3953488372093023,
+            "jaccard_sens_iqr": 0.09523809523809523,
+            "jaccard_res_median": 0.4634146341463415,
+            "jaccard_res_iqr": 0.1046511627906977,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/DOCETAXEL.tsv",
+          "sha256": "f61247e074b36260e230020630cd3200f22d4b82f265547ece854a44ab03662e"
+        },
+        {
+          "drug_norm": "DOXORUBICIN",
+          "drug_ccle_col": "DOXORUBICIN (CTRP:36599)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 195,
+          "n_resistant_cells": 195,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5528140598413201,
+          "dropoff_ratio_resistance": 0.4102096997181571,
+          "stability": {
+            "jaccard_sens_median": 0.5789473684210527,
+            "jaccard_sens_iqr": 0.1216216216216216,
+            "jaccard_res_median": 0.7142857142857143,
+            "jaccard_res_iqr": 0.10930047694753575,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/DOXORUBICIN.tsv",
+          "sha256": "dc53c93a73503e7e7353f2cd9fb4a887f628a446458d10d364b3f00d78df710b"
+        },
+        {
+          "drug_norm": "ERLOTINIB",
+          "drug_ccle_col": "ERLOTINIB (CTRP:52928)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 192,
+          "n_resistant_cells": 192,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.23944052155819334,
+          "dropoff_ratio_resistance": 0.4941436709068313,
+          "stability": {
+            "jaccard_sens_median": 0.7647058823529411,
+            "jaccard_sens_iqr": 0.10389610389610393,
+            "jaccard_res_median": 0.6904761904761905,
+            "jaccard_res_iqr": 0.14308426073131952,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/ERLOTINIB.tsv",
+          "sha256": "016e654b5e890afe30cff2ff9d4e6770e9748a24d63ed6bc8ab77acbccc4ff2a"
+        },
+        {
+          "drug_norm": "ETOPOSIDE",
+          "drug_ccle_col": "ETOPOSIDE (CTRP:48589)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 192,
+          "n_resistant_cells": 192,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.2729035859943662,
+          "dropoff_ratio_resistance": 0.44407483238394263,
+          "stability": {
+            "jaccard_sens_median": 0.5384615384615384,
+            "jaccard_sens_iqr": 0.11553273427471117,
+            "jaccard_res_median": 0.6216216216216216,
+            "jaccard_res_iqr": 0.1282051282051282,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/ETOPOSIDE.tsv",
+          "sha256": "0edf7673b1c76604d732160db0fd0814d9a43944d988575ebf803c6514a4cb2a"
+        },
+        {
+          "drug_norm": "FLUOROURACIL",
+          "drug_ccle_col": "FLUOROURACIL (CTRP:25344)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 193,
+          "n_resistant_cells": 193,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.3004510531765726,
+          "dropoff_ratio_resistance": 0.4592499433144183,
+          "stability": {
+            "jaccard_sens_median": 0.6666666666666666,
+            "jaccard_sens_iqr": 0.13533834586466165,
+            "jaccard_res_median": 0.6216216216216216,
+            "jaccard_res_iqr": 0.08771929824561397,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/FLUOROURACIL.tsv",
+          "sha256": "6a59e8813a36730cf2c039b3dba4790365b13d679000116751ed7f7e5af69f1b"
+        },
+        {
+          "drug_norm": "FULVESTRANT",
+          "drug_ccle_col": "FULVESTRANT (CTRP:464880)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 52,
+          "n_resistant_cells": 51,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.49993197127089234,
+          "dropoff_ratio_resistance": 0.403123617307384,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.1333333333333333,
+            "jaccard_res_median": 0.22448979591836735,
+            "jaccard_res_iqr": 0.07352941176470587,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/FULVESTRANT.tsv",
+          "sha256": "cddd61b5cf63149e5027380958b2fe5a3730bcf1d0675808da5d9f09fc413575"
+        },
+        {
+          "drug_norm": "GEFITINIB",
+          "drug_ccle_col": "GEFITINIB (CTRP:52926)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 189,
+          "n_resistant_cells": 189,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.23250791324853182,
+          "dropoff_ratio_resistance": 0.502248971017899,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.0980392156862745,
+            "jaccard_res_median": 0.7142857142857143,
+            "jaccard_res_iqr": 0.0980392156862745,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/GEFITINIB.tsv",
+          "sha256": "03c2b654ef7803d55ff8e6a7ea94da3da6f52fbd677b2e7b3478cf0e2d42b2be"
+        },
+        {
+          "drug_norm": "GEMCITABINE",
+          "drug_ccle_col": "GEMCITABINE (CTRP:411863)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 175,
+          "n_resistant_cells": 175,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.16915280164910046,
+          "dropoff_ratio_resistance": 0.42647814705073717,
+          "stability": {
+            "jaccard_sens_median": 0.36363636363636365,
+            "jaccard_sens_iqr": 0.10394889663182344,
+            "jaccard_res_median": 0.5,
+            "jaccard_res_iqr": 0.11553273427471117,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/GEMCITABINE.tsv",
+          "sha256": "36321a49de87d2e513c403c046cafcfba37edc67670be5331fcba3ec7f1c075b"
+        },
+        {
+          "drug_norm": "IFOSFAMIDE",
+          "drug_ccle_col": "IFOSFAMIDE (CTRP:35319)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 96,
+          "n_resistant_cells": 96,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.38834396681845534,
+          "dropoff_ratio_resistance": 0.4374296933922101,
+          "stability": {
+            "jaccard_sens_median": 0.30434782608695654,
+            "jaccard_sens_iqr": 0.11363636363636365,
+            "jaccard_res_median": 0.25,
+            "jaccard_res_iqr": 0.15686274509803919,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/IFOSFAMIDE.tsv",
+          "sha256": "54e8640d787f5bb9821ebf6a4959a40716ba0bcf915add1a53ddd6e6c5f4c2d7"
+        },
+        {
+          "drug_norm": "IMATINIB",
+          "drug_ccle_col": "IMATINIB (CTRP:345041)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 190,
+          "n_resistant_cells": 189,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.4087559847958816,
+          "dropoff_ratio_resistance": 0.31837105226187407,
+          "stability": {
+            "jaccard_sens_median": 0.30434782608695654,
+            "jaccard_sens_iqr": 0.11363636363636365,
+            "jaccard_res_median": 0.3953488372093023,
+            "jaccard_res_iqr": 0.13008130081300817,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/IMATINIB.tsv",
+          "sha256": "1212491526e0d8796eb0a6cf096c7c1233bb38f874e5c7d1aa316e64c79a92be"
+        },
+        {
+          "drug_norm": "LAPATINIB",
+          "drug_ccle_col": "LAPATINIB (CTRP:634309)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 181,
+          "n_resistant_cells": 182,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.2517768156665935,
+          "dropoff_ratio_resistance": 0.4678008871525741,
+          "stability": {
+            "jaccard_sens_median": 0.8181818181818182,
+            "jaccard_sens_iqr": 0.11029411764705888,
+            "jaccard_res_median": 0.6666666666666666,
+            "jaccard_res_iqr": 0.0926640926640927,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/LAPATINIB.tsv",
+          "sha256": "9b57cefe8d61af3f4a99dff63b86f68aa37a0a051b2f47160a48cf839cca5c58"
+        },
+        {
+          "drug_norm": "METHOTREXATE",
+          "drug_ccle_col": "METHOTREXATE (CTRP:30371)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 184,
+          "n_resistant_cells": 184,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.4229794129077162,
+          "dropoff_ratio_resistance": 0.4222097926338157,
+          "stability": {
+            "jaccard_sens_median": 0.3953488372093023,
+            "jaccard_sens_iqr": 0.09523809523809523,
+            "jaccard_res_median": 0.4634146341463415,
+            "jaccard_res_iqr": 0.1046511627906977,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/METHOTREXATE.tsv",
+          "sha256": "f8509bc7403d763f4a99bb5859572363d4de4dfef49102b0bef8df6397d12ed2"
+        },
+        {
+          "drug_norm": "MITOMYCIN",
+          "drug_ccle_col": "MITOMYCIN (CTRP:50732)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 191,
+          "n_resistant_cells": 191,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.3777650242846316,
+          "dropoff_ratio_resistance": 0.4526718076644623,
+          "stability": {
+            "jaccard_sens_median": 0.5,
+            "jaccard_sens_iqr": 0.11553273427471117,
+            "jaccard_res_median": 0.6216216216216216,
+            "jaccard_res_iqr": 0.08771929824561397,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/MITOMYCIN.tsv",
+          "sha256": "a72be8c9f3f332bcc1385473b8ba4c9612717fd5495568134f669779ffb6cb64"
+        },
+        {
+          "drug_norm": "PACLITAXEL",
+          "drug_ccle_col": "PACLITAXEL (CTRP:26956)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 189,
+          "n_resistant_cells": 189,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5162869575452596,
+          "dropoff_ratio_resistance": 0.4639101436604487,
+          "stability": {
+            "jaccard_sens_median": 0.5,
+            "jaccard_sens_iqr": 0.10989010989010989,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.07894736842105265,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/PACLITAXEL.tsv",
+          "sha256": "ed7fa3734ef8831f34e714760e234b434d8b798f7512648069faf083f3718607"
+        },
+        {
+          "drug_norm": "PAZOPANIB",
+          "drug_ccle_col": "PAZOPANIB (CTRP:640265)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 192,
+          "n_resistant_cells": 191,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.4409695592492228,
+          "dropoff_ratio_resistance": 0.3570818627862233,
+          "stability": {
+            "jaccard_sens_median": 0.5192307692307692,
+            "jaccard_sens_iqr": 0.11553273427471117,
+            "jaccard_res_median": 0.6216216216216216,
+            "jaccard_res_iqr": 0.1282051282051282,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/PAZOPANIB.tsv",
+          "sha256": "911f60401b0da87eadc139b3dac598eb58af7033db5e7b86c69de09de40d8438"
+        },
+        {
+          "drug_norm": "PROCARBAZINE",
+          "drug_ccle_col": "PROCARBAZINE (CTRP:28183)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 179,
+          "n_resistant_cells": 179,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.49487780252603214,
+          "dropoff_ratio_resistance": 0.28993577583908786,
+          "stability": {
+            "jaccard_sens_median": 0.30434782608695654,
+            "jaccard_sens_iqr": 0.11363636363636365,
+            "jaccard_res_median": 0.36363636363636365,
+            "jaccard_res_iqr": 0.09930665896287733,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/PROCARBAZINE.tsv",
+          "sha256": "55abdca128750dec5d3e40e3ab95addf36cde822eb84b4f173e1f13c80d0b32f"
+        },
+        {
+          "drug_norm": "REGORAFENIB",
+          "drug_ccle_col": "REGORAFENIB (CTRP:628613)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 185,
+          "n_resistant_cells": 185,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.4143856129059813,
+          "dropoff_ratio_resistance": 0.49569339410971147,
+          "stability": {
+            "jaccard_sens_median": 0.3333333333333333,
+            "jaccard_sens_iqr": 0.09100101112234577,
+            "jaccard_res_median": 0.5,
+            "jaccard_res_iqr": 0.12424353566843938,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/REGORAFENIB.tsv",
+          "sha256": "466cb4bdf495ab743cfcfa458371820baa52e593e0b56304c6c61ff5d7930610"
+        },
+        {
+          "drug_norm": "RIGOSERTIB",
+          "drug_ccle_col": "RIGOSERTIB (CTRP:660397)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 185,
+          "n_resistant_cells": 185,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5206227758729703,
+          "dropoff_ratio_resistance": 0.460950129695939,
+          "stability": {
+            "jaccard_sens_median": 0.4634146341463415,
+            "jaccard_sens_iqr": 0.1046511627906977,
+            "jaccard_res_median": 0.5789473684210527,
+            "jaccard_res_iqr": 0.08316008316008316,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/RIGOSERTIB.tsv",
+          "sha256": "7850b01840a3aaa7d63dc46f45837973c6f5985bec66406472db3ba1f65c1347"
+        },
+        {
+          "drug_norm": "TEMSIROLIMUS",
+          "drug_ccle_col": "TEMSIROLIMUS (CTRP:660358)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 98,
+          "n_resistant_cells": 98,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5261546076422643,
+          "dropoff_ratio_resistance": 0.38273098996140525,
+          "stability": {
+            "jaccard_sens_median": 0.36363636363636365,
+            "jaccard_sens_iqr": 0.124223602484472,
+            "jaccard_res_median": 0.3953488372093023,
+            "jaccard_res_iqr": 0.16666666666666669,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/TEMSIROLIMUS.tsv",
+          "sha256": "6c918a1e5d09cd6ca92709108b9003aaf8b393bd2acdd805e05ea300d674859d"
+        },
+        {
+          "drug_norm": "THALIDOMIDE",
+          "drug_ccle_col": "THALIDOMIDE (CTRP:24197)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 97,
+          "n_resistant_cells": 97,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.33086697575325513,
+          "dropoff_ratio_resistance": 0.3621370938765013,
+          "stability": {
+            "jaccard_sens_median": 0.3188405797101449,
+            "jaccard_sens_iqr": 0.1215644820295983,
+            "jaccard_res_median": 0.36363636363636365,
+            "jaccard_res_iqr": 0.09100101112234577,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/THALIDOMIDE.tsv",
+          "sha256": "ed4482190a73d43361091d24c92384a749284eb9b3684f0eee4758269ac851c9"
+        },
+        {
+          "drug_norm": "TOP2_POISON_CONSENSUS",
+          "drug_ccle_col": null,
+          "n_up": 18,
+          "n_down": 23,
+          "n_input_drugs": 2,
+          "input_drugs": [
+            "DOXORUBICIN",
+            "ETOPOSIDE"
+          ],
+          "score_col": "mean_rank",
+          "stability": {
+            "jaccard_sens_median": 0.5,
+            "jaccard_sens_iqr": 0.1396221532091097,
+            "jaccard_res_median": 0.5925925925925926,
+            "jaccard_res_iqr": 0.11872710622710625,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/TOP2_POISON_CONSENSUS.tsv",
+          "sha256": "bd2bbfc6dca15d705e437bbc8b148416fa7d66986bc858512eb4cd120d1a9eb1"
+        },
+        {
+          "drug_norm": "TOPOTECAN",
+          "drug_ccle_col": "TOPOTECAN (CTRP:44580)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 195,
+          "n_resistant_cells": 195,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.21378565851340467,
+          "dropoff_ratio_resistance": 0.4201687736564061,
+          "stability": {
+            "jaccard_sens_median": 0.5,
+            "jaccard_sens_iqr": 0.10989010989010989,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.15820698747528011,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/TOPOTECAN.tsv",
+          "sha256": "109ed2d87626f3c79ed891d30f2c6955306a51a8816e178ef62d68246baed944"
+        },
+        {
+          "drug_norm": "TRAMETINIB",
+          "drug_ccle_col": "TRAMETINIB (CTRP:687418)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 99,
+          "n_resistant_cells": 99,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.3750080549177835,
+          "dropoff_ratio_resistance": 0.3415378337551326,
+          "stability": {
+            "jaccard_sens_median": 0.5789473684210527,
+            "jaccard_sens_iqr": 0.1282051282051282,
+            "jaccard_res_median": 0.5789473684210527,
+            "jaccard_res_iqr": 0.1216216216216216,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/TRAMETINIB.tsv",
+          "sha256": "8cce8e1ccfc1bac0e56b3fe5945db23f0ac08646ffc21e8edc6fc94b8f97b034"
+        },
+        {
+          "drug_norm": "VINCRISTINE",
+          "drug_ccle_col": "VINCRISTINE (CTRP:62602)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 199,
+          "n_resistant_cells": 200,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5032607656281494,
+          "dropoff_ratio_resistance": 0.4433697820920308,
+          "stability": {
+            "jaccard_sens_median": 0.5384615384615384,
+            "jaccard_sens_iqr": 0.0880937098844673,
+            "jaccard_res_median": 0.7142857142857143,
+            "jaccard_res_iqr": 0.10930047694753575,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/VINCRISTINE.tsv",
+          "sha256": "da598273ea41500fdc089e1084c1e43f7b8bf146f0bd7e9310b137278ea3a68f"
+        },
+        {
+          "drug_norm": "VORINOSTAT",
+          "drug_ccle_col": "VORINOSTAT (CTRP:56554)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 186,
+          "n_resistant_cells": 186,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5194510075637833,
+          "dropoff_ratio_resistance": 0.3548419447023279,
+          "stability": {
+            "jaccard_sens_median": 0.5384615384615384,
+            "jaccard_sens_iqr": 0.1216216216216216,
+            "jaccard_res_median": 0.6666666666666666,
+            "jaccard_res_iqr": 0.0926640926640927,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_30_oncokb_all/VORINOSTAT.tsv",
+          "sha256": "1b0bcd4d874726655661b69c695454c9a56c3ee1cdfdfa3075ff4364a7513f68"
+        }
+      ],
+      "quantile_20_protein": [
+        {
+          "drug_norm": "CABOZANTINIB",
+          "drug_ccle_col": "CABOZANTINIB (CTRP:660840)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 125,
+          "n_resistant_cells": 125,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5711094132791587,
+          "dropoff_ratio_resistance": 0.6268569748002762,
+          "stability": {
+            "jaccard_sens_median": 0.3953488372093023,
+            "jaccard_sens_iqr": 0.13008130081300817,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.15820698747528011,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/CABOZANTINIB.tsv",
+          "sha256": "21cb49946868784a4456f49c4354e3ca1e99509fdd53658aa2d1b2afe8c980b6"
+        },
+        {
+          "drug_norm": "CARBOPLATIN",
+          "drug_ccle_col": "CARBOPLATIN (CTRP:26979)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 128,
+          "n_resistant_cells": 128,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5357115010457022,
+          "dropoff_ratio_resistance": 0.5841500830362526,
+          "stability": {
+            "jaccard_sens_median": 0.21224489795918366,
+            "jaccard_sens_iqr": 0.12274959083469722,
+            "jaccard_res_median": 0.22448979591836735,
+            "jaccard_res_iqr": 0.10012515644555695,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/CARBOPLATIN.tsv",
+          "sha256": "6b0dc875d96164ef4c140e930ca1dbf303290c7bffb22a951518e1dce83d478b"
+        },
+        {
+          "drug_norm": "CYCLOPHOSPHAMIDE",
+          "drug_ccle_col": "CYCLOPHOSPHAMIDE (CTRP:32620)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 65,
+          "n_resistant_cells": 65,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6309547631872365,
+          "dropoff_ratio_resistance": 0.5474526311118749,
+          "stability": {
+            "jaccard_sens_median": 0.15384615384615385,
+            "jaccard_sens_iqr": 0.0888888888888889,
+            "jaccard_res_median": 0.15384615384615385,
+            "jaccard_res_iqr": 0.0888888888888889,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/CYCLOPHOSPHAMIDE.tsv",
+          "sha256": "1c3cd385bfe7a2f85be40890e4deec7604350836419dfabd9e3eb8a9ebf166d1"
+        },
+        {
+          "drug_norm": "DABRAFENIB",
+          "drug_ccle_col": "DABRAFENIB (CTRP:687954)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 66,
+          "n_resistant_cells": 66,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6492377777648212,
+          "dropoff_ratio_resistance": 0.5941467957911846,
+          "stability": {
+            "jaccard_sens_median": 0.4634146341463415,
+            "jaccard_sens_iqr": 0.14311270125223613,
+            "jaccard_res_median": 0.3953488372093023,
+            "jaccard_res_iqr": 0.1329344038782002,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/DABRAFENIB.tsv",
+          "sha256": "ee27f894e8fcb0199063de9e34ff2a80bb450ae986531990a0ba6e020fbe2543"
+        },
+        {
+          "drug_norm": "DACARBAZINE",
+          "drug_ccle_col": "DACARBAZINE (CTRP:32622)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 127,
+          "n_resistant_cells": 127,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5298958216675241,
+          "dropoff_ratio_resistance": 0.5787773824250659,
+          "stability": {
+            "jaccard_sens_median": 0.22448979591836735,
+            "jaccard_sens_iqr": 0.10012515644555695,
+            "jaccard_res_median": 0.2,
+            "jaccard_res_iqr": 0.09615384615384615,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/DACARBAZINE.tsv",
+          "sha256": "4d855bebdf3e203302e6b074ac9fe6d650bc790baa51cded6c961ddf13fb9073"
+        },
+        {
+          "drug_norm": "DASATINIB",
+          "drug_ccle_col": "DASATINIB (CTRP:52882)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 128,
+          "n_resistant_cells": 128,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6447895532998238,
+          "dropoff_ratio_resistance": 0.7170330645218722,
+          "stability": {
+            "jaccard_sens_median": 0.6666666666666666,
+            "jaccard_sens_iqr": 0.0926640926640927,
+            "jaccard_res_median": 0.3953488372093023,
+            "jaccard_res_iqr": 0.09523809523809523,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/DASATINIB.tsv",
+          "sha256": "48141bb18e86cb1a23980f268c0a4de31d46db1ce324768dbd5a7cc2fe78fd05"
+        },
+        {
+          "drug_norm": "DEXAMETHASONE",
+          "drug_ccle_col": "DEXAMETHASONE (CTRP:277354)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 124,
+          "n_resistant_cells": 124,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5817527027135885,
+          "dropoff_ratio_resistance": 0.6781826981097648,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.1278772378516624,
+            "jaccard_res_median": 0.15384615384615385,
+            "jaccard_res_iqr": 0.06535947712418302,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/DEXAMETHASONE.tsv",
+          "sha256": "6e9cbbfa70c2a8b4d911fab97588ab81ee87a40ca3894e7f8326bc9180a8a46b"
+        },
+        {
+          "drug_norm": "DOCETAXEL",
+          "drug_ccle_col": "DOCETAXEL (CTRP:660364)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 62,
+          "n_resistant_cells": 62,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5776769977498563,
+          "dropoff_ratio_resistance": 0.5789996427344358,
+          "stability": {
+            "jaccard_sens_median": 0.30434782608695654,
+            "jaccard_sens_iqr": 0.09368955512572535,
+            "jaccard_res_median": 0.36363636363636365,
+            "jaccard_res_iqr": 0.10248447204968941,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/DOCETAXEL.tsv",
+          "sha256": "e6e46e5ce335dd95cdc6d9255f435f0c15615915e27bf49a016360d8358650d5"
+        },
+        {
+          "drug_norm": "DOXORUBICIN",
+          "drug_ccle_col": "DOXORUBICIN (CTRP:36599)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 130,
+          "n_resistant_cells": 130,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6189590253737256,
+          "dropoff_ratio_resistance": 0.7043588920325502,
+          "stability": {
+            "jaccard_sens_median": 0.3953488372093023,
+            "jaccard_sens_iqr": 0.09523809523809523,
+            "jaccard_res_median": 0.5789473684210527,
+            "jaccard_res_iqr": 0.1216216216216216,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/DOXORUBICIN.tsv",
+          "sha256": "895629e1fcbff27e7af419aaca611e394267b48314efa569845493df7a056746"
+        },
+        {
+          "drug_norm": "ERLOTINIB",
+          "drug_ccle_col": "ERLOTINIB (CTRP:52928)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 128,
+          "n_resistant_cells": 128,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.7271952175177367,
+          "dropoff_ratio_resistance": 0.5747698214815756,
+          "stability": {
+            "jaccard_sens_median": 0.7142857142857143,
+            "jaccard_sens_iqr": 0.0980392156862745,
+            "jaccard_res_median": 0.6216216216216216,
+            "jaccard_res_iqr": 0.1282051282051282,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/ERLOTINIB.tsv",
+          "sha256": "6360c0d30a3d479c613aebd647af0abf2e81ed1c9fb271dacb8dffb8620bfc81"
+        },
+        {
+          "drug_norm": "ETOPOSIDE",
+          "drug_ccle_col": "ETOPOSIDE (CTRP:48589)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 128,
+          "n_resistant_cells": 128,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6597285164632994,
+          "dropoff_ratio_resistance": 0.7133413129381806,
+          "stability": {
+            "jaccard_sens_median": 0.42857142857142855,
+            "jaccard_sens_iqr": 0.1046511627906977,
+            "jaccard_res_median": 0.5789473684210527,
+            "jaccard_res_iqr": 0.1216216216216216,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/ETOPOSIDE.tsv",
+          "sha256": "34d16dc3465d358468af2a3f45c49fde7f0b3515458ae1a533af0525c53e7a04"
+        },
+        {
+          "drug_norm": "FLUOROURACIL",
+          "drug_ccle_col": "FLUOROURACIL (CTRP:25344)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 129,
+          "n_resistant_cells": 129,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6263630557257495,
+          "dropoff_ratio_resistance": 0.5378227839103592,
+          "stability": {
+            "jaccard_sens_median": 0.5,
+            "jaccard_sens_iqr": 0.10989010989010989,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.11553273427471117,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/FLUOROURACIL.tsv",
+          "sha256": "481321dc4ebb57e1d2cb8c775abd5ca580cf522ca374836f3694506ef03a4f90"
+        },
+        {
+          "drug_norm": "GEFITINIB",
+          "drug_ccle_col": "GEFITINIB (CTRP:52926)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 126,
+          "n_resistant_cells": 126,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6798344111264257,
+          "dropoff_ratio_resistance": 0.46383705557725474,
+          "stability": {
+            "jaccard_sens_median": 0.7647058823529411,
+            "jaccard_sens_iqr": 0.1158008658008659,
+            "jaccard_res_median": 0.5,
+            "jaccard_res_iqr": 0.11553273427471117,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/GEFITINIB.tsv",
+          "sha256": "d8d5895b4e1e5c80ee616c62cfa77551e757155d099af50004302d85b3fcac00"
+        },
+        {
+          "drug_norm": "GEMCITABINE",
+          "drug_ccle_col": "GEMCITABINE (CTRP:411863)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 117,
+          "n_resistant_cells": 117,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.38453459214525193,
+          "dropoff_ratio_resistance": 0.670730519900475,
+          "stability": {
+            "jaccard_sens_median": 0.3333333333333333,
+            "jaccard_sens_iqr": 0.11875309252845123,
+            "jaccard_res_median": 0.4634146341463415,
+            "jaccard_res_iqr": 0.14311270125223613,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/GEMCITABINE.tsv",
+          "sha256": "c5c9d234103ed45ea73c687d96f421e4d53fe791b3c0cf6f60a3165b164520e5"
+        },
+        {
+          "drug_norm": "IFOSFAMIDE",
+          "drug_ccle_col": "IFOSFAMIDE (CTRP:35319)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 64,
+          "n_resistant_cells": 64,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5074276724597477,
+          "dropoff_ratio_resistance": 0.5330798589873545,
+          "stability": {
+            "jaccard_sens_median": 0.15384615384615385,
+            "jaccard_sens_iqr": 0.0679245283018868,
+            "jaccard_res_median": 0.17647058823529413,
+            "jaccard_res_iqr": 0.07404697728147863,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/IFOSFAMIDE.tsv",
+          "sha256": "d4fdf9cc0c84dd9ad53736d19b300b6d0224ec4368321e70c718b9f6b94aa3c5"
+        },
+        {
+          "drug_norm": "IMATINIB",
+          "drug_ccle_col": "IMATINIB (CTRP:345041)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 126,
+          "n_resistant_cells": 127,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5436091188715269,
+          "dropoff_ratio_resistance": 0.5403977616711502,
+          "stability": {
+            "jaccard_sens_median": 0.1320754716981132,
+            "jaccard_sens_iqr": 0.08556149732620322,
+            "jaccard_res_median": 0.22448979591836735,
+            "jaccard_res_iqr": 0.1335333464489475,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/IMATINIB.tsv",
+          "sha256": "eb7caa02c7bd08eca6b47ad736aa03effd62411ddcde5332e0d1c3a1afe2ef8c"
+        },
+        {
+          "drug_norm": "LAPATINIB",
+          "drug_ccle_col": "LAPATINIB (CTRP:634309)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 121,
+          "n_resistant_cells": 121,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6785865412763301,
+          "dropoff_ratio_resistance": 0.453580400584283,
+          "stability": {
+            "jaccard_sens_median": 0.7647058823529411,
+            "jaccard_sens_iqr": 0.10389610389610393,
+            "jaccard_res_median": 0.6216216216216216,
+            "jaccard_res_iqr": 0.1282051282051282,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/LAPATINIB.tsv",
+          "sha256": "e98964bc91be88421c6fd9dbb6cc54409d1d10190026c04897f237e47150ad14"
+        },
+        {
+          "drug_norm": "METHOTREXATE",
+          "drug_ccle_col": "METHOTREXATE (CTRP:30371)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 123,
+          "n_resistant_cells": 123,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.629711526850361,
+          "dropoff_ratio_resistance": 0.6056109969436835,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.10434782608695653,
+            "jaccard_res_median": 0.36363636363636365,
+            "jaccard_res_iqr": 0.09523809523809523,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/METHOTREXATE.tsv",
+          "sha256": "e6365ae90eb6957ce1db3e580a1bb54a9cc98d7e477a7cf78c24680d3dae1452"
+        },
+        {
+          "drug_norm": "MITOMYCIN",
+          "drug_ccle_col": "MITOMYCIN (CTRP:50732)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 128,
+          "n_resistant_cells": 128,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6415609127408756,
+          "dropoff_ratio_resistance": 0.6284852487563702,
+          "stability": {
+            "jaccard_sens_median": 0.4634146341463415,
+            "jaccard_sens_iqr": 0.1748251748251748,
+            "jaccard_res_median": 0.5789473684210527,
+            "jaccard_res_iqr": 0.1216216216216216,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/MITOMYCIN.tsv",
+          "sha256": "ef3702b40833754ec4e87aee336397a9ab0c39a3f52dec47bdc35a22dad369df"
+        },
+        {
+          "drug_norm": "PACLITAXEL",
+          "drug_ccle_col": "PACLITAXEL (CTRP:26956)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 126,
+          "n_resistant_cells": 126,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6303925404313462,
+          "dropoff_ratio_resistance": 0.6682547094878605,
+          "stability": {
+            "jaccard_sens_median": 0.3953488372093023,
+            "jaccard_sens_iqr": 0.124223602484472,
+            "jaccard_res_median": 0.42857142857142855,
+            "jaccard_res_iqr": 0.13636363636363635,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/PACLITAXEL.tsv",
+          "sha256": "2ff2cb7c9a7fa8cc0b01b67bd0aa83eb0810907a2347109587563cf5232cf932"
+        },
+        {
+          "drug_norm": "PAZOPANIB",
+          "drug_ccle_col": "PAZOPANIB (CTRP:640265)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 127,
+          "n_resistant_cells": 127,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5625037538885157,
+          "dropoff_ratio_resistance": 0.6562148251891045,
+          "stability": {
+            "jaccard_sens_median": 0.3333333333333333,
+            "jaccard_sens_iqr": 0.11875309252845123,
+            "jaccard_res_median": 0.4634146341463415,
+            "jaccard_res_iqr": 0.14393939393939392,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/PAZOPANIB.tsv",
+          "sha256": "e41232532dd942f2aafc966d2a0115e6182a41b5991acd99468818cf3e083a00"
+        },
+        {
+          "drug_norm": "PROCARBAZINE",
+          "drug_ccle_col": "PROCARBAZINE (CTRP:28183)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 120,
+          "n_resistant_cells": 120,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5966703002621399,
+          "dropoff_ratio_resistance": 0.6301490845453299,
+          "stability": {
+            "jaccard_sens_median": 0.2,
+            "jaccard_sens_iqr": 0.09615384615384615,
+            "jaccard_res_median": 0.2,
+            "jaccard_res_iqr": 0.09615384615384615,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/PROCARBAZINE.tsv",
+          "sha256": "26d2d8b470ddfc1a0f56def3881d55875ad9720a6791c983ee0e3e652de2484e"
+        },
+        {
+          "drug_norm": "REGORAFENIB",
+          "drug_ccle_col": "REGORAFENIB (CTRP:628613)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 123,
+          "n_resistant_cells": 123,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.617340396580207,
+          "dropoff_ratio_resistance": 0.6289429665768898,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.10884353741496597,
+            "jaccard_res_median": 0.3953488372093023,
+            "jaccard_res_iqr": 0.13116162283599836,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/REGORAFENIB.tsv",
+          "sha256": "e8f79d5c12a6462303666aa46d8aed9504442ac6ac27c268a31390c4568134dc"
+        },
+        {
+          "drug_norm": "RIGOSERTIB",
+          "drug_ccle_col": "RIGOSERTIB (CTRP:660397)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 124,
+          "n_resistant_cells": 124,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.645196518933915,
+          "dropoff_ratio_resistance": 0.7044314073206324,
+          "stability": {
+            "jaccard_sens_median": 0.42857142857142855,
+            "jaccard_sens_iqr": 0.13008130081300817,
+            "jaccard_res_median": 0.4634146341463415,
+            "jaccard_res_iqr": 0.14311270125223613,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/RIGOSERTIB.tsv",
+          "sha256": "88ff42328772795b25f741362f551b309d3e3a785ed8e5408c41c2bc49a9d8ef"
+        },
+        {
+          "drug_norm": "TEMSIROLIMUS",
+          "drug_ccle_col": "TEMSIROLIMUS (CTRP:660358)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 66,
+          "n_resistant_cells": 66,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5765768940627718,
+          "dropoff_ratio_resistance": 0.5982972422917372,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.10012515644555695,
+            "jaccard_res_median": 0.21224489795918366,
+            "jaccard_res_iqr": 0.12274959083469722,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/TEMSIROLIMUS.tsv",
+          "sha256": "cc61d92df880e08ccf7f98a5d90aa235760515bd92ffc710e004c1f1f37bb197"
+        },
+        {
+          "drug_norm": "THALIDOMIDE",
+          "drug_ccle_col": "THALIDOMIDE (CTRP:24197)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 65,
+          "n_resistant_cells": 65,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.681268295303169,
+          "dropoff_ratio_resistance": 0.4645148427287214,
+          "stability": {
+            "jaccard_sens_median": 0.2,
+            "jaccard_sens_iqr": 0.14452027298273787,
+            "jaccard_res_median": 0.18823529411764706,
+            "jaccard_res_iqr": 0.1179245283018868,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/THALIDOMIDE.tsv",
+          "sha256": "4979ff2d274202a37642bfa244e70c4ef761727309e509d08488687bd9fb850c"
+        },
+        {
+          "drug_norm": "TOP2_POISON_CONSENSUS",
+          "drug_ccle_col": null,
+          "n_up": 18,
+          "n_down": 23,
+          "n_input_drugs": 2,
+          "input_drugs": [
+            "DOXORUBICIN",
+            "ETOPOSIDE"
+          ],
+          "score_col": "mean_rank",
+          "stability": {
+            "jaccard_sens_median": 0.3333333333333333,
+            "jaccard_sens_iqr": 0.1281468531468532,
+            "jaccard_res_median": 0.4666666666666667,
+            "jaccard_res_iqr": 0.1481481481481482,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/TOP2_POISON_CONSENSUS.tsv",
+          "sha256": "4fa39c2c02d78069dbb675419c8a1d10f2b58d0c375f6281e33f10cd1c5c8eeb"
+        },
+        {
+          "drug_norm": "TOPOTECAN",
+          "drug_ccle_col": "TOPOTECAN (CTRP:44580)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 130,
+          "n_resistant_cells": 130,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.44992400572088054,
+          "dropoff_ratio_resistance": 0.7003010106143999,
+          "stability": {
+            "jaccard_sens_median": 0.4634146341463415,
+            "jaccard_sens_iqr": 0.14311270125223613,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.15820698747528011,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/TOPOTECAN.tsv",
+          "sha256": "74120fd90936a49d0feb0cbfe1ad3a04a6ae4b230e43c000e99a53e6062b0159"
+        },
+        {
+          "drug_norm": "TRAMETINIB",
+          "drug_ccle_col": "TRAMETINIB (CTRP:687418)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 66,
+          "n_resistant_cells": 66,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.7301066279670956,
+          "dropoff_ratio_resistance": 0.5863005190499023,
+          "stability": {
+            "jaccard_sens_median": 0.42857142857142855,
+            "jaccard_sens_iqr": 0.1046511627906977,
+            "jaccard_res_median": 0.4634146341463415,
+            "jaccard_res_iqr": 0.11426654740608228,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/TRAMETINIB.tsv",
+          "sha256": "90af95addaa866985bfbbd5772f6e5d454eb385139d9446eb15c7120a5886a10"
+        },
+        {
+          "drug_norm": "VINCRISTINE",
+          "drug_ccle_col": "VINCRISTINE (CTRP:62602)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 133,
+          "n_resistant_cells": 133,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6043452060275856,
+          "dropoff_ratio_resistance": 0.6901482949887645,
+          "stability": {
+            "jaccard_sens_median": 0.4634146341463415,
+            "jaccard_sens_iqr": 0.1046511627906977,
+            "jaccard_res_median": 0.5789473684210527,
+            "jaccard_res_iqr": 0.1216216216216216,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/VINCRISTINE.tsv",
+          "sha256": "6a4982850ef104825a455d01ac800e3543f6d1bc305dcba18efeedb24ace1f0e"
+        },
+        {
+          "drug_norm": "VORINOSTAT",
+          "drug_ccle_col": "VORINOSTAT (CTRP:56554)",
+          "n_up": 30,
+          "n_down": 30,
+          "n_sensitive_cells": 124,
+          "n_resistant_cells": 124,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6845335754276819,
+          "dropoff_ratio_resistance": 0.6129718932225879,
+          "stability": {
+            "jaccard_sens_median": 0.4634146341463415,
+            "jaccard_sens_iqr": 0.14311270125223613,
+            "jaccard_res_median": 0.6216216216216216,
+            "jaccard_res_iqr": 0.1282051282051282,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/quantile_20_protein/VORINOSTAT.tsv",
+          "sha256": "93706e55956ea4e282e41ce34ff4e597827eb17c78c47e14c968594e5db24af3"
+        }
+      ],
+      "spearman_top20_oncokb": [
+        {
+          "drug_norm": "CABOZANTINIB",
+          "drug_ccle_col": "CABOZANTINIB (CTRP:660840)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 624,
+          "n_resistant_cells": 624,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.7851427129115208,
+          "dropoff_ratio_resistance": 0.45820625644046975,
+          "stability": {
+            "jaccard_sens_median": 0.3333333333333333,
+            "jaccard_sens_iqr": 0.08898776418242488,
+            "jaccard_res_median": 0.50997150997151,
+            "jaccard_res_iqr": 0.183743842364532,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/CABOZANTINIB.tsv",
+          "sha256": "ec7b9ce5c355d24d423d86be52a9b8447cc013d2df8ae5a3d91d526fd85f21e2"
+        },
+        {
+          "drug_norm": "CARBOPLATIN",
+          "drug_ccle_col": "CARBOPLATIN (CTRP:26979)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 636,
+          "n_resistant_cells": 636,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.7884541430354436,
+          "dropoff_ratio_resistance": 0.5120601530747689,
+          "stability": {
+            "jaccard_sens_median": 0.2903225806451613,
+            "jaccard_sens_iqr": 0.12121212121212119,
+            "jaccard_res_median": 0.3793103448275862,
+            "jaccard_res_iqr": 0.13824884792626724,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/CARBOPLATIN.tsv",
+          "sha256": "88eeaf9a4e485ba97ea026afbfa702333041d13094d7bc52d824efc626c446ed"
+        },
+        {
+          "drug_norm": "CYCLOPHOSPHAMIDE",
+          "drug_ccle_col": "CYCLOPHOSPHAMIDE (CTRP:32620)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 323,
+          "n_resistant_cells": 323,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.7357838382500548,
+          "dropoff_ratio_resistance": 0.5325257182682561,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.11385199240986718,
+            "jaccard_res_median": 0.21212121212121213,
+            "jaccard_res_iqr": 0.10714285714285715,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/CYCLOPHOSPHAMIDE.tsv",
+          "sha256": "e087a578fedb5cc809b77c974429eded1c54ebf7065f3aef25085aba854a2eee"
+        },
+        {
+          "drug_norm": "DABRAFENIB",
+          "drug_ccle_col": "DABRAFENIB (CTRP:687954)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 328,
+          "n_resistant_cells": 328,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5906598149795175,
+          "dropoff_ratio_resistance": 0.6956013293559675,
+          "stability": {
+            "jaccard_sens_median": 0.42857142857142855,
+            "jaccard_sens_iqr": 0.14814814814814814,
+            "jaccard_res_median": 0.3793103448275862,
+            "jaccard_res_iqr": 0.09523809523809523,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/DABRAFENIB.tsv",
+          "sha256": "291257cbccf6a431f32a9c8751c7cc6b003233093d91fb35e6579da349c27a16"
+        },
+        {
+          "drug_norm": "DACARBAZINE",
+          "drug_ccle_col": "DACARBAZINE (CTRP:32622)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 634,
+          "n_resistant_cells": 634,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6293146594154759,
+          "dropoff_ratio_resistance": 0.5330995176520313,
+          "stability": {
+            "jaccard_sens_median": 0.21212121212121213,
+            "jaccard_sens_iqr": 0.11385199240986718,
+            "jaccard_res_median": 0.2903225806451613,
+            "jaccard_res_iqr": 0.12121212121212119,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/DACARBAZINE.tsv",
+          "sha256": "84955c9ff63866b917e238da8a5c7d7244c80cd422562d436f7712873c57089f"
+        },
+        {
+          "drug_norm": "DASATINIB",
+          "drug_ccle_col": "DASATINIB (CTRP:52882)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 640,
+          "n_resistant_cells": 640,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5518052728541146,
+          "dropoff_ratio_resistance": 0.5704273721543236,
+          "stability": {
+            "jaccard_sens_median": 0.7391304347826086,
+            "jaccard_sens_iqr": 0.07246376811594202,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.11851851851851852,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/DASATINIB.tsv",
+          "sha256": "6adaafe74ff05622ad55998e27a74267473d922b66f09b8fe0fa5b39373d965b"
+        },
+        {
+          "drug_norm": "DEXAMETHASONE",
+          "drug_ccle_col": "DEXAMETHASONE (CTRP:277354)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 620,
+          "n_resistant_cells": 620,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.3757237556365292,
+          "dropoff_ratio_resistance": 0.5078781202904673,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.12121212121212119,
+            "jaccard_res_median": 0.2903225806451613,
+            "jaccard_res_iqr": 0.12121212121212119,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/DEXAMETHASONE.tsv",
+          "sha256": "e14ba5c5c4a1ff27eedf07d1f35e51ae61f247e757cca79235eba16f2d08a8dd"
+        },
+        {
+          "drug_norm": "DOCETAXEL",
+          "drug_ccle_col": "DOCETAXEL (CTRP:660364)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 309,
+          "n_resistant_cells": 309,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5834067066316972,
+          "dropoff_ratio_resistance": 0.5863055833533398,
+          "stability": {
+            "jaccard_sens_median": 0.42857142857142855,
+            "jaccard_sens_iqr": 0.10217113665389527,
+            "jaccard_res_median": 0.48148148148148145,
+            "jaccard_res_iqr": 0.15915119363395225,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/DOCETAXEL.tsv",
+          "sha256": "a8a29fe05d17db386638747b701df0dc56a6383bf694527b726ac2f35ccc89de"
+        },
+        {
+          "drug_norm": "DOXORUBICIN",
+          "drug_ccle_col": "DOXORUBICIN (CTRP:36599)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 650,
+          "n_resistant_cells": 650,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6442127151467194,
+          "dropoff_ratio_resistance": 0.5069274828391765,
+          "stability": {
+            "jaccard_sens_median": 0.48148148148148145,
+            "jaccard_sens_iqr": 0.10989010989010989,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.11851851851851852,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/DOXORUBICIN.tsv",
+          "sha256": "f4f78eba8f8d4d857b8187f7acbed239ea67ed444b8d980db200d65a9899732b"
+        },
+        {
+          "drug_norm": "ERLOTINIB",
+          "drug_ccle_col": "ERLOTINIB (CTRP:52928)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 639,
+          "n_resistant_cells": 639,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.4923506167440808,
+          "dropoff_ratio_resistance": 0.7224307407680041,
+          "stability": {
+            "jaccard_sens_median": 0.6666666666666666,
+            "jaccard_sens_iqr": 0.13913043478260867,
+            "jaccard_res_median": 0.50997150997151,
+            "jaccard_res_iqr": 0.13174603174603172,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/ERLOTINIB.tsv",
+          "sha256": "b2715a4c0113b2bfab1937cd8f187c610c99f32b04fcbb609dbcc373f61e47a8"
+        },
+        {
+          "drug_norm": "ETOPOSIDE",
+          "drug_ccle_col": "ETOPOSIDE (CTRP:48589)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 638,
+          "n_resistant_cells": 638,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.7186778425700798,
+          "dropoff_ratio_resistance": 0.4974148575107721,
+          "stability": {
+            "jaccard_sens_median": 0.48148148148148145,
+            "jaccard_sens_iqr": 0.12527472527472533,
+            "jaccard_res_median": 0.6,
+            "jaccard_res_iqr": 0.1282051282051282,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/ETOPOSIDE.tsv",
+          "sha256": "d53b6decccc609219124beb2b83c64a3fe73b5f1fde52813c43de1c85a21cb11"
+        },
+        {
+          "drug_norm": "FLUOROURACIL",
+          "drug_ccle_col": "FLUOROURACIL (CTRP:25344)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 642,
+          "n_resistant_cells": 642,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6211079587436249,
+          "dropoff_ratio_resistance": 0.7233337761941182,
+          "stability": {
+            "jaccard_sens_median": 0.5384615384615384,
+            "jaccard_sens_iqr": 0.11851851851851852,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.11851851851851852,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/FLUOROURACIL.tsv",
+          "sha256": "168df415ad5ae7d65a13d697f9e0bfd7a8de4dbdb49bf92b676468b344065d04"
+        },
+        {
+          "drug_norm": "FULVESTRANT",
+          "drug_ccle_col": "FULVESTRANT (CTRP:464880)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 168,
+          "n_resistant_cells": 168,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6146864615510869,
+          "dropoff_ratio_resistance": 0.5722154883009575,
+          "stability": {
+            "jaccard_sens_median": 0.21212121212121213,
+            "jaccard_sens_iqr": 0.11385199240986718,
+            "jaccard_res_median": 0.21212121212121213,
+            "jaccard_res_iqr": 0.11385199240986718,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/FULVESTRANT.tsv",
+          "sha256": "210214ad26eb6f86e52e6d3288c4d8eb4f13d164eaad7b183a694108dc98323f"
+        },
+        {
+          "drug_norm": "GEFITINIB",
+          "drug_ccle_col": "GEFITINIB (CTRP:52926)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 628,
+          "n_resistant_cells": 628,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.4400401713249864,
+          "dropoff_ratio_resistance": 0.6666393398296678,
+          "stability": {
+            "jaccard_sens_median": 0.6666666666666666,
+            "jaccard_sens_iqr": 0.13913043478260867,
+            "jaccard_res_median": 0.48148148148148145,
+            "jaccard_res_iqr": 0.10989010989010989,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/GEFITINIB.tsv",
+          "sha256": "1f790b843a2f396c9bc00040aca71350040cecef33b6028e5738101e83dee005"
+        },
+        {
+          "drug_norm": "GEMCITABINE",
+          "drug_ccle_col": "GEMCITABINE (CTRP:411863)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 583,
+          "n_resistant_cells": 583,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6268830654967926,
+          "dropoff_ratio_resistance": 0.6626085153292537,
+          "stability": {
+            "jaccard_sens_median": 0.48148148148148145,
+            "jaccard_sens_iqr": 0.10989010989010989,
+            "jaccard_res_median": 0.42857142857142855,
+            "jaccard_res_iqr": 0.15915119363395225,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/GEMCITABINE.tsv",
+          "sha256": "2a814349c3e0746e7d7f94aad77ce0b4ecc5a6434ac93fe16310cea0aa33d531"
+        },
+        {
+          "drug_norm": "IFOSFAMIDE",
+          "drug_ccle_col": "IFOSFAMIDE (CTRP:35319)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 319,
+          "n_resistant_cells": 319,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6258953975210108,
+          "dropoff_ratio_resistance": 0.6260554795899979,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.15686274509803919,
+            "jaccard_res_median": 0.2903225806451613,
+            "jaccard_res_iqr": 0.08333333333333331,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/IFOSFAMIDE.tsv",
+          "sha256": "bca5c3c7909a9a61acc766c62b972087b40b673858e6978f00cfbcab6e88b790"
+        },
+        {
+          "drug_norm": "IMATINIB",
+          "drug_ccle_col": "IMATINIB (CTRP:345041)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 630,
+          "n_resistant_cells": 630,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5036277391577187,
+          "dropoff_ratio_resistance": 0.4297770926960578,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.07820136852394918,
+            "jaccard_res_median": 0.25,
+            "jaccard_res_iqr": 0.08895405669599218,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/IMATINIB.tsv",
+          "sha256": "7c9c9b48cac20d14dffceee172e99a9e8a74723a93454de5b46e186e423bbe65"
+        },
+        {
+          "drug_norm": "LAPATINIB",
+          "drug_ccle_col": "LAPATINIB (CTRP:634309)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 602,
+          "n_resistant_cells": 602,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.46800041308409096,
+          "dropoff_ratio_resistance": 0.7403734441225978,
+          "stability": {
+            "jaccard_sens_median": 0.7391304347826086,
+            "jaccard_sens_iqr": 0.07905138339920958,
+            "jaccard_res_median": 0.6,
+            "jaccard_res_iqr": 0.1282051282051282,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/LAPATINIB.tsv",
+          "sha256": "deb02da215da98ffa8e3d44e58cca0b0b8084238c7d8ded71ad9cf5796f70b92"
+        },
+        {
+          "drug_norm": "METHOTREXATE",
+          "drug_ccle_col": "METHOTREXATE (CTRP:30371)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 613,
+          "n_resistant_cells": 613,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5014768816412856,
+          "dropoff_ratio_resistance": 0.7019058923812189,
+          "stability": {
+            "jaccard_sens_median": 0.6,
+            "jaccard_sens_iqr": 0.07578347578347577,
+            "jaccard_res_median": 0.3793103448275862,
+            "jaccard_res_iqr": 0.09523809523809523,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/METHOTREXATE.tsv",
+          "sha256": "df73c59437b0eef395addc4c71f24a24bae7ba1c5c5dc8970e65ad686b5bcab9"
+        },
+        {
+          "drug_norm": "MITOMYCIN",
+          "drug_ccle_col": "MITOMYCIN (CTRP:50732)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 637,
+          "n_resistant_cells": 637,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.7133294998289657,
+          "dropoff_ratio_resistance": 0.6724186114697731,
+          "stability": {
+            "jaccard_sens_median": 0.5384615384615384,
+            "jaccard_sens_iqr": 0.10989010989010989,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.11851851851851852,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/MITOMYCIN.tsv",
+          "sha256": "5a25bf34bb150636ddcbbc7b84ff0c0d8559f53d7e726b71be6450af9b560292"
+        },
+        {
+          "drug_norm": "PACLITAXEL",
+          "drug_ccle_col": "PACLITAXEL (CTRP:26956)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 628,
+          "n_resistant_cells": 628,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6688011400764399,
+          "dropoff_ratio_resistance": 0.6044413955300525,
+          "stability": {
+            "jaccard_sens_median": 0.5384615384615384,
+            "jaccard_sens_iqr": 0.11851851851851852,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.11851851851851852,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/PACLITAXEL.tsv",
+          "sha256": "d93830ad62102947884d16108243302ce0b64b6d03d9438fcc886712b0b58a3a"
+        },
+        {
+          "drug_norm": "PAZOPANIB",
+          "drug_ccle_col": "PAZOPANIB (CTRP:640265)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 635,
+          "n_resistant_cells": 635,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6314999396361414,
+          "dropoff_ratio_resistance": 0.5431568213622229,
+          "stability": {
+            "jaccard_sens_median": 0.48148148148148145,
+            "jaccard_sens_iqr": 0.10989010989010989,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.13174603174603172,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/PAZOPANIB.tsv",
+          "sha256": "634880ddd141cd37085c5d0e3370007c9e93e37ceca926068cea0b0e5d38cba3"
+        },
+        {
+          "drug_norm": "PROCARBAZINE",
+          "drug_ccle_col": "PROCARBAZINE (CTRP:28183)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 597,
+          "n_resistant_cells": 597,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.5127608504117881,
+          "dropoff_ratio_resistance": 0.5577093257452123,
+          "stability": {
+            "jaccard_sens_median": 0.2903225806451613,
+            "jaccard_sens_iqr": 0.12121212121212119,
+            "jaccard_res_median": 0.25,
+            "jaccard_res_iqr": 0.08895405669599218,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/PROCARBAZINE.tsv",
+          "sha256": "bd15b361edbeae7f256d310dfc6190c0bdbb15a5cc673606aa54af12406b9140"
+        },
+        {
+          "drug_norm": "REGORAFENIB",
+          "drug_ccle_col": "REGORAFENIB (CTRP:628613)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 615,
+          "n_resistant_cells": 615,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6797134391378041,
+          "dropoff_ratio_resistance": 0.604016288194824,
+          "stability": {
+            "jaccard_sens_median": 0.3793103448275862,
+            "jaccard_sens_iqr": 0.13824884792626724,
+            "jaccard_res_median": 0.42857142857142855,
+            "jaccard_res_iqr": 0.14814814814814814,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/REGORAFENIB.tsv",
+          "sha256": "8a141f6e4ecebd00ed86f865f24ed3d12f25c2d5c4b09f18b47e441cdafe24a5"
+        },
+        {
+          "drug_norm": "RIGOSERTIB",
+          "drug_ccle_col": "RIGOSERTIB (CTRP:660397)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 617,
+          "n_resistant_cells": 617,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.6955408307152899,
+          "dropoff_ratio_resistance": 0.5772830040229661,
+          "stability": {
+            "jaccard_sens_median": 0.5384615384615384,
+            "jaccard_sens_iqr": 0.07236467236467242,
+            "jaccard_res_median": 0.5384615384615384,
+            "jaccard_res_iqr": 0.10989010989010989,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/RIGOSERTIB.tsv",
+          "sha256": "5a406eab9e10a1769b33fd610dfdeef4749ef53c6823a561faee63033d36df77"
+        },
+        {
+          "drug_norm": "TEMSIROLIMUS",
+          "drug_ccle_col": "TEMSIROLIMUS (CTRP:660358)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 327,
+          "n_resistant_cells": 327,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.7461310203149966,
+          "dropoff_ratio_resistance": 0.4675500584087075,
+          "stability": {
+            "jaccard_sens_median": 0.3333333333333333,
+            "jaccard_sens_iqr": 0.1293103448275862,
+            "jaccard_res_median": 0.3793103448275862,
+            "jaccard_res_iqr": 0.09523809523809523,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/TEMSIROLIMUS.tsv",
+          "sha256": "09bc307cc49bf15d68db4bd86e2e5d59b0c58ee4a20d4326fbc1980dd09f53f7"
+        },
+        {
+          "drug_norm": "THALIDOMIDE",
+          "drug_ccle_col": "THALIDOMIDE (CTRP:24197)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 324,
+          "n_resistant_cells": 324,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.7525927265542154,
+          "dropoff_ratio_resistance": 0.3272364976290527,
+          "stability": {
+            "jaccard_sens_median": 0.25,
+            "jaccard_sens_iqr": 0.08895405669599218,
+            "jaccard_res_median": 0.2903225806451613,
+            "jaccard_res_iqr": 0.09482758620689652,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/THALIDOMIDE.tsv",
+          "sha256": "d349dd2a57f5d7cc9c2fa982c1804713c2b3ac04c207ab790a6e8d6988fbf457"
+        },
+        {
+          "drug_norm": "TOP2_POISON_CONSENSUS",
+          "drug_ccle_col": null,
+          "n_up": 12,
+          "n_down": 15,
+          "n_input_drugs": 2,
+          "input_drugs": [
+            "DOXORUBICIN",
+            "ETOPOSIDE"
+          ],
+          "score_col": "mean_rank",
+          "stability": {
+            "jaccard_sens_median": 0.3684210526315789,
+            "jaccard_sens_iqr": 0.12620192307692307,
+            "jaccard_res_median": 0.5294117647058824,
+            "jaccard_res_iqr": 0.11111111111111116,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/TOP2_POISON_CONSENSUS.tsv",
+          "sha256": "2c21f69fda55e63849f78d6d9deef03508b9859fea1ef48d18a4ce543a9fe766"
+        },
+        {
+          "drug_norm": "TOPOTECAN",
+          "drug_ccle_col": "TOPOTECAN (CTRP:44580)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 648,
+          "n_resistant_cells": 648,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.7821575882763031,
+          "dropoff_ratio_resistance": 0.5354299497958879,
+          "stability": {
+            "jaccard_sens_median": 0.6,
+            "jaccard_sens_iqr": 0.1282051282051282,
+            "jaccard_res_median": 0.6,
+            "jaccard_res_iqr": 0.11851851851851852,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/TOPOTECAN.tsv",
+          "sha256": "9be0c502fda04262fe5aab72738473c2d717260782b4bb6659e72bdaf6fcb023"
+        },
+        {
+          "drug_norm": "TRAMETINIB",
+          "drug_ccle_col": "TRAMETINIB (CTRP:687418)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 330,
+          "n_resistant_cells": 330,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.3489987988874766,
+          "dropoff_ratio_resistance": 0.7395458129779073,
+          "stability": {
+            "jaccard_sens_median": 0.5384615384615384,
+            "jaccard_sens_iqr": 0.07578347578347577,
+            "jaccard_res_median": 0.3793103448275862,
+            "jaccard_res_iqr": 0.14814814814814814,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/TRAMETINIB.tsv",
+          "sha256": "1c2291b7cbd6b386b688d7dfa69c56ad8d4997fabfe734e7c65147b4dc3297e6"
+        },
+        {
+          "drug_norm": "VINCRISTINE",
+          "drug_ccle_col": "VINCRISTINE (CTRP:62602)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 661,
+          "n_resistant_cells": 661,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.7177968865408725,
+          "dropoff_ratio_resistance": 0.6292040309601888,
+          "stability": {
+            "jaccard_sens_median": 0.6,
+            "jaccard_sens_iqr": 0.1282051282051282,
+            "jaccard_res_median": 0.6,
+            "jaccard_res_iqr": 0.08205128205128209,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/VINCRISTINE.tsv",
+          "sha256": "90df7b4181a2a5b33d924c0f16deb90e89c742fa289ab453b087fcad9525f533"
+        },
+        {
+          "drug_norm": "VORINOSTAT",
+          "drug_ccle_col": "VORINOSTAT (CTRP:56554)",
+          "n_up": 20,
+          "n_down": 20,
+          "n_sensitive_cells": 620,
+          "n_resistant_cells": 620,
+          "n_cell_lines_used": 674,
+          "dropoff_ratio_sensitivity": 0.744398818978718,
+          "dropoff_ratio_resistance": 0.7287258441532795,
+          "stability": {
+            "jaccard_sens_median": 0.5384615384615384,
+            "jaccard_sens_iqr": 0.11851851851851852,
+            "jaccard_res_median": 0.6,
+            "jaccard_res_iqr": 0.08205128205128209,
+            "n_bootstrap_successful": 100
+          },
+          "file": "frozen_signatures/solid_only/spearman_top20_oncokb/VORINOSTAT.tsv",
+          "sha256": "f9db79ea5b3788493134e34a4fc3c6cfbe6c3ca17626dc20b5543ea9fc3008f6"
+        }
+      ]
+    },
+    "skipped_drugs": [
+      {
+        "drug_norm": "FULVESTRANT",
+        "strategy": "quantile_20_protein",
+        "reason": "too_few_per_group(34,34)"
+      }
+    ]
+  }
+}
