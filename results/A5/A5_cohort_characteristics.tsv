@@ -1,4 +1,0 @@
-cohort	n_profiled	n_analysed	events	pcr_rate	ER_pos	ER_neg	HER2_pos	HER2_neg	TNBC	HRpos_HER2neg
-GSE16446	114	114	16	0.14	0	114	0	114	114	0
-GSE22226	124	120	32	0.267	60	60	38	82	39	43
-GSE25066	488	488	99	0.203	285	203	5	483	199	284
