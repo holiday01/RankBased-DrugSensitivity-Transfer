@@ -1,0 +1,80 @@
+{
+  "script": "/home/holiday01/2026_ISMB_code/revise_bioadv/resubmission_v2/scripts/phase_8/TGFBstrom_gse25066.py",
+  "script_sha256": "89b4fedfca202712bcb090dde8db2d746482907053af76af1266c45284288494",
+  "started_utc": "2026-05-29T08:31:08.608176Z",
+  "signature": "TGF-beta stromal / CAF (Calon 2015 PNAS / NG; 12-gene proxy)",
+  "signature_confidence": "MEDIUM-HIGH (CAF6 core HIGH; 6-gene ECM/CAF extension MEDIUM-HIGH; robust proxy of Calon TGF-beta stromal program)",
+  "scoring": "mean per-gene z-score across 12 genes; all UP (stromal-high)",
+  "n_requested": 12,
+  "decision_rule": "point<=0.55 AND ci_lo<=0.55 -> CONFIRMED; >0.60 AND ci_lo>0.55 -> FALSIFIED; else GRAY",
+  "expected_outcome": "MEDIUM-HIGH chance of FALSIFICATION: stromal program biologically orthogonal to P/H/B/H_PAM50basal; anti-pCR direction expected (higher stromal score -> lower pCR -> AUROC < 0.5 possible).",
+  "anti_pcr_note": "Calon TGF-beta stromal score is anti-pCR; AUROC <0.5 in raw form still counts as signal. The 3x3 verdict_3x3() uses signed AUROC (rule from _common.py); a score with strong anti-pCR residual will show AUROC < 0.5, which under the pre-spec rule (residual point > 0.60 AND ci_lo > 0.55) does NOT trigger FALSIFIED. We therefore also report the absolute-distance-from-0.5 perspective in the JSON.",
+  "n_resolved": 12,
+  "resolved_genes": [
+    "TGFB1",
+    "TGFBR2",
+    "INHBA",
+    "CCN2",
+    "POSTN",
+    "FAP",
+    "SPARC",
+    "COL1A1",
+    "COL1A2",
+    "MMP2",
+    "ACTA2",
+    "THBS2"
+  ],
+  "missing_genes": [],
+  "alias_mapping": {
+    "TGFB1": "TGFB1",
+    "TGFBR2": "TGFBR2",
+    "INHBA": "INHBA",
+    "CTGF": "CCN2",
+    "POSTN": "POSTN",
+    "FAP": "FAP",
+    "SPARC": "SPARC",
+    "COL1A1": "COL1A1",
+    "COL1A2": "COL1A2",
+    "MMP2": "MMP2",
+    "ACTA2": "ACTA2",
+    "THBS2": "THBS2"
+  },
+  "n_merged": 508,
+  "n_with_pcr": 488,
+  "pcr_rate": 0.19488188976377951,
+  "sig_vs_axis_pearson_r": {
+    "P": -0.221534771331206,
+    "H": 0.0313964165284704,
+    "B": 0.005637427630694195,
+    "H_PAM50basal": -0.039634154791272254
+  },
+  "marginal_auroc": {
+    "point": 0.4239827581729896,
+    "ci_low": 0.36309656088387754,
+    "ci_high": 0.48474402512894327,
+    "n": 488
+  },
+  "residual_model": {
+    "formula": "sig_TGFBstrom ~ P + H + B + H_PAM50basal",
+    "n_used": 488,
+    "coefficients": {
+      "P": -0.2328242007144967,
+      "H": 0.03424358781648637,
+      "B": 0.06481539718225673,
+      "H_PAM50basal": 0.27259003067828075,
+      "intercept": -0.024343071216050324
+    }
+  },
+  "residual_auroc": {
+    "point": 0.4548570538287762,
+    "ci_low": 0.3953551484545653,
+    "ci_high": 0.5118479621411478
+  },
+  "residual_auroc_abs_dist_from_0p5": {
+    "point": 0.045142946171223775,
+    "ci_low_abs": 0.10464485154543468,
+    "ci_high_abs": 0.011847962141147805
+  },
+  "verdict_3x3": "H-b CONFIRMED (no residual signal after deconfounding)",
+  "finished_utc": "2026-05-29T08:31:10.371940Z"
+}

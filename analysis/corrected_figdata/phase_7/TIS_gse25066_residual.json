@@ -1,0 +1,79 @@
+{
+  "script": "/home/holiday01/2026_ISMB_code/revise_bioadv/resubmission_v2/scripts/phase_7/TIS_gse25066.py",
+  "script_sha256": "77dd97839bf6d4056a9ff4db175655a2df4da6bf942dd525189503eb1c21e096",
+  "started_utc": "2026-05-29T08:26:06.112068Z",
+  "signature": "TIS / Ayers 18-gene IFN-gamma immune signature (Ayers JCI 2017)",
+  "signature_confidence": "HIGH (published verbatim 18-gene list)",
+  "scoring": "mean per-gene z-score across 18 genes; all up (immune-active = high)",
+  "n_requested": 18,
+  "decision_rule": "point<=0.55 AND ci_lo<=0.55 -> CONFIRMED; >0.60 AND ci_lo>0.55 -> FALSIFIED; else GRAY",
+  "expected_outcome": "HIGH chance of FALSIFICATION; TIS is biologically orthogonal to P/H/B/H_PAM50basal",
+  "n_resolved": 16,
+  "resolved_genes": [
+    "CCL5",
+    "CD27",
+    "CD8A",
+    "CMKLR1",
+    "CXCL9",
+    "CXCR6",
+    "GZMA",
+    "HLA-DQA1",
+    "HLA-DRB1",
+    "HLA-E",
+    "IDO1",
+    "LAG3",
+    "NKG7",
+    "PDCD1LG2",
+    "PSMB10",
+    "STAT1"
+  ],
+  "missing_genes": [
+    "CD274",
+    "CD276"
+  ],
+  "alias_mapping": {
+    "CCL5": "CCL5",
+    "CD27": "CD27",
+    "CD8A": "CD8A",
+    "CMKLR1": "CMKLR1",
+    "CXCL9": "CXCL9",
+    "CXCR6": "CXCR6",
+    "GZMA": "GZMA",
+    "HLA-DQA1": "HLA-DQA1",
+    "HLA-DRB1": "HLA-DRB1",
+    "HLA-E": "HLA-E",
+    "IDO1": "IDO1",
+    "LAG3": "LAG3",
+    "NKG7": "NKG7",
+    "PDCD1LG2": "PDCD1LG2",
+    "PSMB10": "PSMB10",
+    "STAT1": "STAT1"
+  },
+  "n_merged": 508,
+  "n_with_pcr": 488,
+  "pcr_rate": 0.19488188976377951,
+  "marginal_auroc": {
+    "point": 0.5799901326893615,
+    "ci_low": 0.5180878908596236,
+    "ci_high": 0.6449290183584503,
+    "n": 488
+  },
+  "residual_model": {
+    "formula": "sig_TIS ~ P + H + B + H_PAM50basal",
+    "n_used": 488,
+    "coefficients": {
+      "P": -0.1792512295728942,
+      "H": -0.1544058926187779,
+      "B": -0.03084604651480677,
+      "H_PAM50basal": 0.3384713394992741,
+      "intercept": -0.0018803992566435992
+    }
+  },
+  "residual_auroc": {
+    "point": 0.5317961102022798,
+    "ci_low": 0.4707270296896413,
+    "ci_high": 0.6011737499752736
+  },
+  "verdict_3x3": "H-b CONFIRMED (no residual signal after deconfounding)",
+  "finished_utc": "2026-05-29T08:26:07.868088Z"
+}

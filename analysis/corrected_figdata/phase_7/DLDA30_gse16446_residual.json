@@ -1,0 +1,75 @@
+{
+  "script": "/home/holiday01/2026_ISMB_code/revise_bioadv/resubmission_v2/scripts/phase_7/DLDA30_gse16446.py",
+  "script_sha256": "465239090c2d917cae5a1939d76ad8cbfda1f6f221b66ae7a14203c07f179019",
+  "started_utc": "2026-05-29T08:26:13.681155Z",
+  "signature": "DLDA30-like (Hatzis JAMA 2011) - 26-gene approximation",
+  "signature_confidence": "LOW-MEDIUM (gene list reconstructed from memory; not verbatim from Hatzis 2011 Suppl. Table 2)",
+  "signature_caveat": "23 UP (PROL+/mitotic) + 3 DOWN (ER+/luminal). True DLDA30 has 30 probesets with DLDA weights; we use signed-z-sum with +/-1. This captures the dominant proliferation-vs-ER-direction signal but loses drug-specific weights.",
+  "scoring": "mean(UP z) - mean(DOWN z); signed-z-sum form",
+  "n_up_requested": 23,
+  "n_down_requested": 3,
+  "decision_rule": "point<=0.55 AND ci_lo<=0.55 -> CONFIRMED; >0.60 AND ci_lo>0.55 -> FALSIFIED; else GRAY",
+  "expected_outcome": "MEDIUM-HIGH chance of FALSIFICATION; drug-specific (TFAC) trained on different MDACC cohort",
+  "cohort_caveat": "GSE16446 is all-ER- (single-stratum-fallback); ER-axis DOWN component may be flat",
+  "n_up_resolved": 23,
+  "n_down_resolved": 3,
+  "up_resolved": [
+    "BTG3",
+    "CCNE2",
+    "CDK1",
+    "FOXM1",
+    "MELK",
+    "MKI67",
+    "MYBL2",
+    "RACGAP1",
+    "RRM2",
+    "TYMS",
+    "ZWINT",
+    "STMN1",
+    "AURKA",
+    "TRIP13",
+    "NUSAP1",
+    "KIF11",
+    "TPX2",
+    "BIRC5",
+    "EZH2",
+    "UHRF1",
+    "DLGAP5",
+    "GINS1",
+    "MCM10"
+  ],
+  "down_resolved": [
+    "STC2",
+    "TFF3",
+    "IL6ST"
+  ],
+  "up_missing": [],
+  "down_missing": [],
+  "n_merged": 120,
+  "n_with_pcr": 114,
+  "pcr_rate": 0.13333333333333333,
+  "marginal_auroc": {
+    "point": 0.4808673469387755,
+    "ci_low": 0.32288472614574476,
+    "ci_high": 0.6470653886554623,
+    "n": 114
+  },
+  "residual_model": {
+    "formula": "sig_DLDA30 ~ P + H + B + H_PAM50basal",
+    "n_used": 114,
+    "coefficients": {
+      "P": 0.3607849004500679,
+      "H": -0.24419907240547822,
+      "B": 0.16136228080674067,
+      "H_PAM50basal": 0.8871448227043872,
+      "intercept": -0.006765290150742721
+    }
+  },
+  "residual_auroc": {
+    "point": 0.45918367346938777,
+    "ci_low": 0.31849206349206344,
+    "ci_high": 0.594657605466429
+  },
+  "verdict_3x3": "H-b CONFIRMED (no residual signal after deconfounding)",
+  "finished_utc": "2026-05-29T08:26:15.220028Z"
+}

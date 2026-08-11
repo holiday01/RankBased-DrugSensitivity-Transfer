@@ -1,0 +1,74 @@
+{
+  "script": "/home/holiday01/2026_ISMB_code/revise_bioadv/resubmission_v2/scripts/phase_8/HRD_gse22226.py",
+  "script_sha256": "ab79174851ef06a420304d44e2343fa05d4a74223d2be810b9152e621dc297a8",
+  "started_utc": "2026-05-29T08:31:10.970243Z",
+  "signature": "HRD / BRCAness RNA signature (Severson 2017 9-gene primary; Peng 2014 3-gene fallback)",
+  "signature_confidence": "MEDIUM (Severson 9-gene HR/Fanconi core recalled; not verified against Suppl. table verbatim). Peng 2014 3-gene fallback HIGH (BRCA1, RAD51, FANCD2 are canonical HR-core).",
+  "scoring": "mean per-gene z-score; HIGH score = HR-proficient, LOW = BRCAness",
+  "decision_rule": "point<=0.55 AND ci_lo<=0.55 -> CONFIRMED; >0.60 AND ci_lo>0.55 -> FALSIFIED; else GRAY",
+  "expected_outcome": "MEDIUM chance of FALSIFICATION: HRD biology is mechanistically orthogonal to proliferation/ER/HER2/basal axes. On I-SPY1 (GSE22226) anthracycline-taxane cohort, BRCAness signal is weaker than on platinum cohorts; effect size may be marginal.",
+  "used_gene_list": "Severson_9gene",
+  "n_resolved": 9,
+  "resolved_genes": [
+    "BRCA1",
+    "BRCA2",
+    "FANCA",
+    "FANCC",
+    "FANCD2",
+    "ATM",
+    "CHEK2",
+    "RAD51",
+    "RAD51C"
+  ],
+  "missing_genes": [],
+  "alias_mapping": {
+    "BRCA1": "BRCA1",
+    "BRCA2": "BRCA2",
+    "FANCA": "FANCA",
+    "FANCC": "FANCC",
+    "FANCD2": "FANCD2",
+    "ATM": "ATM",
+    "CHEK2": "CHEK2",
+    "RAD51": "RAD51",
+    "RAD51C": "RAD51C"
+  },
+  "n_requested": 9,
+  "n_merged": 130,
+  "n_with_pcr": 124,
+  "pcr_rate": 0.24615384615384617,
+  "sig_vs_axis_pearson_r": {
+    "P": 0.624622089634978,
+    "H": -0.11732155204307479,
+    "B": 0.02841150359849504,
+    "H_PAM50basal": 0.2384757426582585
+  },
+  "marginal_auroc": {
+    "point": 0.6124320652173912,
+    "ci_low": 0.4928958333333333,
+    "ci_high": 0.7221999595070858,
+    "n": 124
+  },
+  "residual_model": {
+    "formula": "sig_HRD ~ P + H + B + H_PAM50basal",
+    "n_used": 120,
+    "coefficients": {
+      "P": 0.30532066952076264,
+      "H": 0.08565337076175887,
+      "B": 0.06626859013926158,
+      "H_PAM50basal": 0.11107687119995382,
+      "intercept": -0.00043710277806578734
+    }
+  },
+  "residual_auroc": {
+    "point": 0.5543323863636364,
+    "ci_low": 0.43941673716393215,
+    "ci_high": 0.6687518531566136
+  },
+  "residual_auroc_abs_dist_from_0p5": {
+    "point": 0.054332386363636354,
+    "ci_low_abs": 0.06058326283606785,
+    "ci_high_abs": 0.16875185315661356
+  },
+  "verdict_3x3": "GRAY ZONE",
+  "finished_utc": "2026-05-29T08:31:12.485392Z"
+}

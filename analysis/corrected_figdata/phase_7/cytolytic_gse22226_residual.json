@@ -1,0 +1,48 @@
+{
+  "script": "/home/holiday01/2026_ISMB_code/revise_bioadv/resubmission_v2/scripts/phase_7/cytolytic_gse22226.py",
+  "script_sha256": "fbe8207f8b218fc36a88a2c623f383bc29eada26845b03706fbceb350d671392",
+  "started_utc": "2026-05-29T08:26:11.542078Z",
+  "signature": "GZMA + PRF1 cytolytic 2-gene (Rooney Cell 2015)",
+  "signature_confidence": "HIGH (canonical 2-gene definition)",
+  "scoring": "mean per-gene z-score across the 2 genes (log proxy for Rooney geometric-mean cytolytic activity)",
+  "n_requested": 2,
+  "decision_rule": "point<=0.55 AND ci_lo<=0.55 -> CONFIRMED; >0.60 AND ci_lo>0.55 -> FALSIFIED; else GRAY",
+  "expected_outcome": "MEDIUM chance of FALSIFICATION; immune-effector axis orthogonal to P/H/B",
+  "n_resolved": 2,
+  "resolved_genes": [
+    "GZMA",
+    "PRF1"
+  ],
+  "missing_genes": [],
+  "alias_mapping": {
+    "GZMA": "GZMA",
+    "PRF1": "PRF1"
+  },
+  "n_merged": 130,
+  "n_with_pcr": 124,
+  "pcr_rate": 0.24615384615384617,
+  "marginal_auroc": {
+    "point": 0.5985054347826086,
+    "ci_low": 0.49274632755381975,
+    "ci_high": 0.7083756070065903,
+    "n": 124
+  },
+  "residual_model": {
+    "formula": "sig_cytolytic ~ P + H + B + H_PAM50basal",
+    "n_used": 120,
+    "coefficients": {
+      "P": -0.10153409028834143,
+      "H": -0.08656613871227686,
+      "B": 0.12283438454879497,
+      "H_PAM50basal": 0.3371549189611073,
+      "intercept": 0.0251888134044035
+    }
+  },
+  "residual_auroc": {
+    "point": 0.5301846590909091,
+    "ci_low": 0.41210149672724555,
+    "ci_high": 0.6405795048207955
+  },
+  "verdict_3x3": "H-b CONFIRMED (no residual signal after deconfounding)",
+  "finished_utc": "2026-05-29T08:26:13.073509Z"
+}
