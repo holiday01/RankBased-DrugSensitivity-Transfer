@@ -1,0 +1,157 @@
+{
+  "spec": "A4 as amended by addendum \u00a713.11",
+  "note": "Per-stratum MDE is the smallest added OR/SD detectable at 80% power at that stratum's n and event count. It is a power calculation, not a measurement, and it is reported beside every non-significant cell so that 'no cell reaches nominal significance' is not read as evidence of absence.",
+  "cells": [
+    {
+      "cohort": "GSE16446",
+      "stratum": null,
+      "evaluable": false,
+      "reason": "cohort is uniformly one IHC stratum; a within-subtype test is undefined and the previously reported row duplicated the marginal result"
+    },
+    {
+      "cohort": "GSE22226",
+      "stratum": "HR+/HER2-",
+      "n": 43,
+      "events": 5,
+      "epv": 1.0,
+      "evaluable": true,
+      "marginal": 0.5211,
+      "residual": 0.6158,
+      "or_sd": 1.511,
+      "or_ci": [
+        0.383,
+        5.96
+      ],
+      "lr_p": 0.5597,
+      "mde_or_sd_80pct": 4.002
+    },
+    {
+      "cohort": "GSE22226",
+      "stratum": "HER2+",
+      "n": 38,
+      "events": 16,
+      "epv": 3.2,
+      "evaluable": true,
+      "marginal": 0.5369,
+      "residual": 0.5653,
+      "or_sd": 1.668,
+      "or_ci": [
+        0.654,
+        4.253
+      ],
+      "lr_p": 0.2723,
+      "mde_or_sd_80pct": 2.898
+    },
+    {
+      "cohort": "GSE22226",
+      "stratum": "TNBC",
+      "n": 39,
+      "events": 11,
+      "epv": 2.2,
+      "evaluable": true,
+      "marginal": 0.6526,
+      "residual": 0.6396,
+      "or_sd": 1.804,
+      "or_ci": [
+        0.846,
+        3.847
+      ],
+      "lr_p": 0.1074,
+      "mde_or_sd_80pct": 3.233
+    },
+    {
+      "cohort": "GSE25066",
+      "stratum": "HR+/HER2-",
+      "n": 258,
+      "events": 28,
+      "epv": 5.6,
+      "evaluable": true,
+      "marginal": 0.447,
+      "residual": 0.4267,
+      "or_sd": 0.808,
+      "or_ci": [
+        0.541,
+        1.208
+      ],
+      "lr_p": 0.2978,
+      "mde_or_sd_80pct": 1.756
+    },
+    {
+      "cohort": "GSE25066",
+      "stratum": "HER2+",
+      "n": 2,
+      "events": 1,
+      "epv": 0.2,
+      "evaluable": false,
+      "reason": "fewer than 5 events in a class"
+    },
+    {
+      "cohort": "GSE25066",
+      "stratum": "TNBC",
+      "n": 167,
+      "events": 59,
+      "epv": 11.8,
+      "evaluable": true,
+      "marginal": 0.4936,
+      "residual": 0.4686,
+      "or_sd": 0.944,
+      "or_ci": [
+        0.675,
+        1.32
+      ],
+      "lr_p": 0.735,
+      "mde_or_sd_80pct": 1.629
+    },
+    {
+      "cohort": "GSE32646",
+      "stratum": "HR+/HER2-",
+      "n": 55,
+      "events": 5,
+      "epv": 1.0,
+      "evaluable": true,
+      "marginal": 0.528,
+      "residual": 0.48,
+      "or_sd": 1.016,
+      "or_ci": [
+        0.375,
+        2.753
+      ],
+      "lr_p": 0.9746,
+      "mde_or_sd_80pct": 3.628
+    },
+    {
+      "cohort": "GSE32646",
+      "stratum": "HER2+",
+      "n": 34,
+      "events": 12,
+      "epv": 2.4,
+      "evaluable": true,
+      "marginal": 0.3258,
+      "residual": 0.3561,
+      "or_sd": 0.555,
+      "or_ci": [
+        0.216,
+        1.426
+      ],
+      "lr_p": 0.2037,
+      "mde_or_sd_80pct": 3.386
+    },
+    {
+      "cohort": "GSE32646",
+      "stratum": "TNBC",
+      "n": 26,
+      "events": 10,
+      "epv": 2.0,
+      "evaluable": true,
+      "marginal": 0.725,
+      "residual": 0.7625,
+      "or_sd": 3.559,
+      "or_ci": [
+        1.106,
+        11.457
+      ],
+      "lr_p": 0.0121,
+      "mde_or_sd_80pct": 4.595
+    }
+  ]
+}

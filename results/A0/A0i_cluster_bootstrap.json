@@ -1,0 +1,219 @@
+{
+  "spec": "ANALYSIS_ADDENDUM_2026-08.md section 5.2",
+  "arm": "PRIMARY: remove from GSE25066",
+  "B": 2000,
+  "seed": 42,
+  "n_union": 776,
+  "replicates_usable": 2000,
+  "realised_k": {
+    "mean": 8.9995,
+    "min": 8,
+    "max": 9,
+    "full_k_fraction": 0.9995
+  },
+  "observed": {
+    "pooled": 0.4994665959731616,
+    "se_naive": 0.013578098524796474,
+    "se_rho1": 0.027643540671029723,
+    "rho1_over_naive": 2.0358918902044185
+  },
+  "se_boot": 0.014533175525287902,
+  "boot_over_naive": 1.0703395249892507,
+  "boot_over_rho1": 0.5257349519093475,
+  "ci_boot_percentile": [
+    0.47167966254635174,
+    0.5270829492566969
+  ],
+  "tost_boot": {
+    "0.53": 0.017822892535183654,
+    "0.55": 0.0002534279008514376,
+    "0.575": 1.010970543004408e-07,
+    "0.6": 2.2982357776714344e-12
+  },
+  "tost_naive": {
+    "0.53": 0.01226501187922342,
+    "0.55": 9.89489451609964e-05,
+    "0.575": 1.3267519144936243e-08,
+    "0.6": 6.602860259690013e-14
+  },
+  "tost_rho1": {
+    "0.53": 0.13467942129157673,
+    "0.55": 0.033772029640774484,
+    "0.575": 0.003143670949041152,
+    "0.6": 0.0001380351537861944
+  },
+  "cells": [
+    {
+      "name": "Framework",
+      "cohort": "GSE32646",
+      "stratum": "all",
+      "n": 115,
+      "events": 27,
+      "genes": 54,
+      "point": 0.4957912457912458,
+      "se": 0.06454426297409835,
+      "ci_cluster_percentile": [
+        0.363439763001975,
+        0.6194920840807641
+      ],
+      "se_cluster": 0.06309640703051067,
+      "replicates_evaluable": 2000,
+      "tost_cell_0.55": 0.19513117253027562
+    },
+    {
+      "name": "DoxVariant",
+      "cohort": "GSE25066",
+      "stratum": "all",
+      "n": 427,
+      "events": 88,
+      "genes": 51,
+      "point": 0.5370407615982837,
+      "se": 0.031171602881718125,
+      "ci_cluster_percentile": [
+        0.4798022643666382,
+        0.5979467098629487
+      ],
+      "se_cluster": 0.030231204014981434,
+      "replicates_evaluable": 2000,
+      "tost_cell_0.55": 0.3340813587045903
+    },
+    {
+      "name": "GGI",
+      "cohort": "GSE25066",
+      "stratum": "all",
+      "n": 427,
+      "events": 88,
+      "genes": 39,
+      "point": 0.47666934835076424,
+      "se": 0.03139102196903919,
+      "ci_cluster_percentile": [
+        0.41300027536264944,
+        0.5393670180694458
+      ],
+      "se_cluster": 0.031174006508718943,
+      "replicates_evaluable": 2000,
+      "tost_cell_0.55": 0.00932883107131626
+    },
+    {
+      "name": "RSlike",
+      "cohort": "GSE25066",
+      "stratum": "HR+",
+      "n": 258,
+      "events": 28,
+      "genes": 15,
+      "point": 0.4563664596273292,
+      "se": 0.059702376811991135,
+      "ci_cluster_percentile": [
+        0.33786268231224964,
+        0.5782092954990214
+      ],
+      "se_cluster": 0.06167447416546263,
+      "replicates_evaluable": 2000,
+      "tost_cell_0.55": 0.0644833142554992
+    },
+    {
+      "name": "DLDA30",
+      "cohort": "GSE16446",
+      "stratum": "all",
+      "n": 114,
+      "events": 16,
+      "genes": 26,
+      "point": 0.4585459183673469,
+      "se": 0.07286298549644679,
+      "ci_cluster_percentile": [
+        0.31237513873473916,
+        0.609427848901533
+      ],
+      "se_cluster": 0.0739334185029964,
+      "replicates_evaluable": 1999,
+      "tost_cell_0.55": 0.10804745068638916
+    },
+    {
+      "name": "TIS",
+      "cohort": "GSE25066",
+      "stratum": "all",
+      "n": 427,
+      "events": 88,
+      "genes": 16,
+      "point": 0.5148163046393134,
+      "se": 0.03304138324283082,
+      "ci_cluster_percentile": [
+        0.4514255529892127,
+        0.5799791908897555
+      ],
+      "se_cluster": 0.033721904895684815,
+      "replicates_evaluable": 2000,
+      "tost_cell_0.55": 0.14839348231926341
+    },
+    {
+      "name": "cytolytic",
+      "cohort": "GSE22226",
+      "stratum": "all",
+      "n": 120,
+      "events": 32,
+      "genes": 2,
+      "point": 0.5305397727272727,
+      "se": 0.05590425854713569,
+      "ci_cluster_percentile": [
+        0.4278836393491566,
+        0.6462214935188052
+      ],
+      "se_cluster": 0.054377478437228885,
+      "replicates_evaluable": 2000,
+      "tost_cell_0.55": 0.3602192066029426
+    },
+    {
+      "name": "HRD",
+      "cohort": "GSE22226",
+      "stratum": "all",
+      "n": 120,
+      "events": 32,
+      "genes": 9,
+      "point": 0.5504261363636362,
+      "se": 0.053736789443336666,
+      "ci_cluster_percentile": [
+        0.4363219194123054,
+        0.6580153617299096
+      ],
+      "se_cluster": 0.055689272276923704,
+      "replicates_evaluable": 2000,
+      "tost_cell_0.55": 0.5030526912397492
+    },
+    {
+      "name": "TGFBstrom",
+      "cohort": "GSE25066",
+      "stratum": "all",
+      "n": 427,
+      "events": 88,
+      "genes": 12,
+      "point": 0.46594261196031106,
+      "se": 0.03030511496153866,
+      "ci_cluster_percentile": [
+        0.4064440617582547,
+        0.5241874323752541
+      ],
+      "se_cluster": 0.030250528119840022,
+      "replicates_evaluable": 2000,
+      "tost_cell_0.55": 0.002728777015912161
+    }
+  ],
+  "folded_sensitivity": {
+    "pooled": 0.5296360074112506,
+    "se_naive": 0.013578098524796474,
+    "tost": {
+      "0.53": 0.4893067028012826,
+      "0.55": 0.06683730304936412,
+      "0.575": 0.00041743423329290393,
+      "0.6": 1.0966055130983682e-07
+    },
+    "note": "Section 13.7 sensitivity arm: |residual-0.5| folded, same fixed inverse-variance weights."
+  },
+  "per_cell_equivalence_summary": {
+    "n_pass": 2,
+    "n_cells": 9,
+    "passing_but_anti_predictive": [
+      "GGI",
+      "TGFBstrom"
+    ]
+  }
+}

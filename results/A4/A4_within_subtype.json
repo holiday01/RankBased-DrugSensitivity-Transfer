@@ -1,0 +1,173 @@
+[
+  {
+    "cohort": "GSE16446",
+    "stratum": "ALL (marginal)",
+    "n": 114,
+    "events": 16,
+    "pcr_rate": 0.14,
+    "evaluable": true,
+    "marginal": 0.6008,
+    "marginal_ci": [
+      0.4581,
+      0.7508
+    ],
+    "or_sd": 1.575,
+    "or_ci": [
+      0.831,
+      2.983
+    ],
+    "lr_p": 0.1585
+  },
+  {
+    "cohort": "GSE16446",
+    "stratum": "TNBC",
+    "n": 114,
+    "events": 16,
+    "pcr_rate": 0.14,
+    "evaluable": true,
+    "marginal": 0.6008,
+    "marginal_ci": [
+      0.4581,
+      0.7508
+    ],
+    "or_sd": 1.575,
+    "or_ci": [
+      0.831,
+      2.983
+    ],
+    "lr_p": 0.1585
+  },
+  {
+    "cohort": "GSE22226",
+    "stratum": "ALL (marginal)",
+    "n": 120,
+    "events": 32,
+    "pcr_rate": 0.267,
+    "evaluable": true,
+    "marginal": 0.576,
+    "marginal_ci": [
+      0.4495,
+      0.6996
+    ],
+    "or_sd": 1.39,
+    "or_ci": [
+      0.877,
+      2.205
+    ],
+    "lr_p": 0.1553
+  },
+  {
+    "cohort": "GSE22226",
+    "stratum": "HR+/HER2-",
+    "n": 43,
+    "events": 5,
+    "pcr_rate": 0.116,
+    "evaluable": true,
+    "marginal": 0.5211,
+    "marginal_ci": [
+      0.1392,
+      0.8904
+    ],
+    "or_sd": 1.432,
+    "or_ci": [
+      0.435,
+      4.718
+    ],
+    "lr_p": 0.5597
+  },
+  {
+    "cohort": "GSE22226",
+    "stratum": "HER2+",
+    "n": 38,
+    "events": 16,
+    "pcr_rate": 0.421,
+    "evaluable": true,
+    "marginal": 0.5369,
+    "marginal_ci": [
+      0.3415,
+      0.7354
+    ],
+    "or_sd": 1.564,
+    "or_ci": [
+      0.69,
+      3.546
+    ],
+    "lr_p": 0.2723
+  },
+  {
+    "cohort": "GSE22226",
+    "stratum": "TNBC",
+    "n": 39,
+    "events": 11,
+    "pcr_rate": 0.282,
+    "evaluable": true,
+    "marginal": 0.6526,
+    "marginal_ci": [
+      0.402,
+      0.8702
+    ],
+    "or_sd": 2.022,
+    "or_ci": [
+      0.819,
+      4.994
+    ],
+    "lr_p": 0.1074
+  },
+  {
+    "cohort": "GSE25066",
+    "stratum": "ALL (marginal)",
+    "n": 488,
+    "events": 99,
+    "pcr_rate": 0.203,
+    "evaluable": true,
+    "marginal": 0.4874,
+    "marginal_ci": [
+      0.4281,
+      0.5516
+    ],
+    "or_sd": 0.826,
+    "or_ci": [
+      0.647,
+      1.054
+    ],
+    "lr_p": 0.124
+  },
+  {
+    "cohort": "GSE25066",
+    "stratum": "HR+/HER2-",
+    "n": 284,
+    "events": 30,
+    "pcr_rate": 0.106,
+    "evaluable": true,
+    "marginal": 0.4479,
+    "marginal_ci": [
+      0.3561,
+      0.5391
+    ],
+    "or_sd": 0.802,
+    "or_ci": [
+      0.548,
+      1.174
+    ],
+    "lr_p": 0.2555
+  },
+  {
+    "cohort": "GSE25066",
+    "stratum": "TNBC",
+    "n": 199,
+    "events": 67,
+    "pcr_rate": 0.337,
+    "evaluable": true,
+    "marginal": 0.4705,
+    "marginal_ci": [
+      0.3859,
+      0.5528
+    ],
+    "or_sd": 0.862,
+    "or_ci": [
+      0.625,
+      1.189
+    ],
+    "lr_p": 0.3633
+  }
+]
