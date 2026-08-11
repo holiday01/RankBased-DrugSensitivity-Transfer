@@ -1,0 +1,29 @@
+{
+  "cohort": "GSE41998",
+  "n_pam50_genes_in_centroid": 50,
+  "n_pam50_genes_in_cohort": 41,
+  "missing_pam50_genes": [
+    "ANLN",
+    "CDCA1",
+    "CXXC5",
+    "GPR160",
+    "KNTC2",
+    "KRT17",
+    "ORC6L",
+    "TMEM45B",
+    "UBE2T"
+  ],
+  "resolved_via_alias": {},
+  "fallback_triggered": false,
+  "centroid_sha256_source": "external_data/pam50_centroids.tsv (genefu pam50 v2.42.0)",
+  "subtype_counts": {
+    "Basal": 114,
+    "LumA": 92,
+    "LumB": 32,
+    "Her2": 23,
+    "Normal": 18
+  },
+  "n_patients": 279,
+  "basal_score_mean": 0.007066246853120805,
+  "basal_score_sd": 0.5459120285454907
+}

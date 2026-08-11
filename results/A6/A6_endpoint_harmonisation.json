@@ -1,0 +1,53 @@
+{
+  "GSE25066": {
+    "rcb_field": "pathologic_response_rcb_class",
+    "n_rcb_known": 360,
+    "events_deposited": 88,
+    "events_harmonised": 105,
+    "agreement_r": 0.7588457244913436,
+    "same_n_deposited": {
+      "n": 360,
+      "events": 69,
+      "lr_p": 0.29073457929608865,
+      "marginal": 0.476965984361771
+    },
+    "same_n_harmonised": {
+      "n": 360,
+      "events": 105,
+      "lr_p": 0.14168623826073518,
+      "marginal": 0.47772175536881417
+    },
+    "full_n_deposited": {
+      "n": 427,
+      "events": 88,
+      "lr_p": 0.33638472093008,
+      "marginal": 0.4982904263877715
+    }
+  },
+  "GSE22226": {
+    "rcb_field": "rcb_class",
+    "n_rcb_known": 110,
+    "events_deposited": 32,
+    "events_harmonised": 41,
+    "agreement_r": 0.8309220900299932,
+    "same_n_deposited": {
+      "n": 110,
+      "events": 32,
+      "lr_p": 0.1987841804709982,
+      "marginal": 0.5737179487179488
+    },
+    "same_n_harmonised": {
+      "n": 110,
+      "events": 41,
+      "lr_p": 0.3753458945253353,
+      "marginal": 0.5447154471544715
+    },
+    "full_n_deposited": {
+      "n": 120,
+      "events": 32,
+      "lr_p": 0.15532611498693893,
+      "marginal": 0.5759943181818181
+    }
+  },
+  "limits": "GSE25066's deposited RCB field is collapsed at RCB-0/I, so RCB-0 is not recoverable; GSE32646 and GSE16446 deposit no RCB at all. The endpoint can be harmonised in 2 of 4 cohorts, and those two are precisely the two that share 65 patients -- so the harmonised analysis is a sensitivity analysis, not a second independent test."
+}

@@ -1,0 +1,23 @@
+{
+  "cohort": "GSE22226",
+  "arm_field": "neoadjuvant_chemotherapy*_(1_=_ac_only;_2_=_ac_+_t;_3_=_ac_+_t_+_herceptin;_4_=_ac_+_t_+_other;)",
+  "arm_counts": {
+    "2": 103,
+    "3": 11,
+    "1": 4,
+    "4": 2
+  },
+  "trastuzumab_n": 11,
+  "trastuzumab_pcr": 5,
+  "full": {
+    "n": 120,
+    "events": 32,
+    "lr_p": 0.15532611498693893
+  },
+  "excluding_trastuzumab": {
+    "n": 109,
+    "events": 27,
+    "lr_p": 0.14823548373596693
+  },
+  "limit": "GSE22226 deposits the only within-cohort regimen field in the study. GSE16446, GSE25066 and GSE32646 deposit none, so cross-regimen consistency is a between-cohort observation confounded with every other cohort difference, and cannot support a claim of regimen-general redundancy."
+}

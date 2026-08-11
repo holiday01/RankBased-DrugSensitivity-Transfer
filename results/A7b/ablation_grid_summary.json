@@ -1,0 +1,34 @@
+{
+  "script": "/home/holiday01/2026_ISMB_code/revise_bioadv_386/analysis/A7b_ablation_corrected.py",
+  "script_sha256": "e272bf625df644ce8ac6779579b0beab35a675f8783cbf63027fdc938c13ddea",
+  "started_utc": "2026-08-04T01:40:45.296599Z",
+  "target_cohort": "GSE25066",
+  "target_drug": "DOXORUBICIN",
+  "grid_size": 36,
+  "primary_config": {
+    "q": 0.3,
+    "top_n": 30,
+    "universe": "oncokb_all"
+  },
+  "discrepancy_note": "Spec says 'on TCGA' but constraints forbid touching TCGA-BRCA. Following pre-existing run_ablation_grid.py: signature derived from CCLE solid-only, evaluated against largest external cohort GSE25066 (488 patients). TCGA-BRCA Phase 3 deferred.",
+  "summary": {
+    "n_grid_configs": 36,
+    "n_valid": 36,
+    "primary_config_AUROC": 0.48739321232894495,
+    "primary_config_rank_within_valid": 30,
+    "primary_config_quartile": 0.8333333333333334,
+    "passes_top_quartile_check": false,
+    "best_AUROC": 0.5898055101139934,
+    "best_config": {
+      "q": 0.3,
+      "top_n": 10,
+      "universe": "protein_coding",
+      "n_up": 10,
+      "n_down": 10,
+      "auroc": 0.5898055101139934,
+      "status": "ok"
+    },
+    "median_AUROC": 0.5062449689699047
+  },
+  "finished_utc": "2026-08-04T01:41:07.715575Z"
+}

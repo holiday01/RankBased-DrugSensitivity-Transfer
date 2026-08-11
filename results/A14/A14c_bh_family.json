@@ -1,0 +1,178 @@
+{
+  "cohort": "GSE41998",
+  "family": "A14 \u2014 its own BH family, per addendum section 7. m = 10: the ten signatures of section 4.2 on one cohort. The six-drug CCLE arm is confined by section 4.2 to the three discovery cohorts and cannot extend here, so m is fixed by the locked lists, not chosen.",
+  "m": 10,
+  "cell_list": [
+    "Framework",
+    "DoxVariant",
+    "MammaPrint",
+    "GGI",
+    "RSlike",
+    "DLDA30",
+    "TIS",
+    "cytolytic",
+    "HRD",
+    "TGFBstrom"
+  ],
+  "q_threshold": 0.1,
+  "supersedes": {
+    "file": "results/A14/A14b_analysis.json",
+    "field": "family",
+    "stale_value": "outside Family A (section 7 optional cohort); nominal p, no BH",
+    "reason": "Contradicts addendum section 7, which gives A14 its own BH family and applies section 10 conditions 1 and 6 to its cells. A14b and its producing script are hash-pinned in the LOCK deposit_manifest and are left unmodified; this file supersedes the field."
+  },
+  "deviation": "Section 7 required the cell list and integer m to be written to decisions_addendum.md before the first p value was computed. No entry does so. The deviation is logged as entry 11. It does not confer latitude over m, which section 4.2's locked lists determine.",
+  "cells": {
+    "Framework": {
+      "lr_p": 0.32101562260015765,
+      "p_entering_bh": 0.32101562260015765,
+      "bh_q": 0.5384402701174497,
+      "residual": 0.547810333963453,
+      "residual_ci": [
+        0.4691139001681638,
+        0.6254367107705384
+      ],
+      "marginal": 0.5003150598613737,
+      "r2_on_axes": 0.0888849668839834,
+      "verdict": "NO-MARGINAL-SIGNAL",
+      "verdict_in_A14b": "NO-MARGINAL-SIGNAL"
+    },
+    "DoxVariant": {
+      "lr_p": 0.01843283470988543,
+      "p_entering_bh": 0.01843283470988543,
+      "bh_q": 0.061442782366284775,
+      "residual": 0.6071991178323881,
+      "residual_ci": [
+        0.5246488389876499,
+        0.6834569162547939
+      ],
+      "marginal": 0.6247637051039697,
+      "r2_on_axes": 0.0923688408201947,
+      "verdict": "ADDS-VALUE",
+      "verdict_in_A14b": "ADDS-VALUE (nominal; outside Family A, no BH applied)"
+    },
+    "MammaPrint": {
+      "lr_p": 0.9895313994026027,
+      "p_entering_bh": 0.9895313994026027,
+      "bh_q": 0.9895313994026027,
+      "residual": 0.4996849401386263,
+      "residual_ci": [
+        0.42247504344289566,
+        0.5802614086166207
+      ],
+      "marginal": 0.6398865784499055,
+      "r2_on_axes": 0.7889451258802741,
+      "verdict": "REDUNDANT-WITH-AXES",
+      "verdict_in_A14b": "REDUNDANT-WITH-AXES"
+    },
+    "GGI": {
+      "lr_p": 0.6886009039802715,
+      "p_entering_bh": 0.6886009039802715,
+      "bh_q": 0.765112115533635,
+      "residual": 0.532451165721487,
+      "residual_ci": [
+        0.45338210814543123,
+        0.6152704642481721
+      ],
+      "marginal": 0.6521739130434783,
+      "r2_on_axes": 0.9231244506427234,
+      "verdict": "REDUNDANT-WITH-AXES",
+      "verdict_in_A14b": "REDUNDANT-WITH-AXES"
+    },
+    "RSlike": {
+      "lr_p": 0.3265079830747398,
+      "p_entering_bh": 0.3265079830747398,
+      "bh_q": 0.5384402701174497,
+      "residual": 0.3949494949494949,
+      "residual_ci": [
+        0.2053237780619494,
+        0.6252349382552898
+      ],
+      "marginal": 0.4939393939393939,
+      "r2_on_axes": 0.8654180965736271,
+      "verdict": "NO-MARGINAL-SIGNAL",
+      "verdict_in_A14b": "NO-MARGINAL-SIGNAL"
+    },
+    "DLDA30": {
+      "lr_p": 0.11995546441850591,
+      "p_entering_bh": 0.11995546441850591,
+      "bh_q": 0.29988866104626477,
+      "residual": 0.5665563957151858,
+      "residual_ci": [
+        0.48946013856362214,
+        0.6385734612084043
+      ],
+      "marginal": 0.6587114051669818,
+      "r2_on_axes": 0.8895504390001036,
+      "verdict": "INDETERMINATE",
+      "verdict_in_A14b": "INDETERMINATE"
+    },
+    "TIS": {
+      "lr_p": 0.004601500897824932,
+      "p_entering_bh": 0.004601500897824932,
+      "bh_q": 0.023007504489124662,
+      "residual": 0.6234247006931316,
+      "residual_ci": [
+        0.5468584284668555,
+        0.6996223641340551
+      ],
+      "marginal": 0.6748582230623819,
+      "r2_on_axes": 0.1916818559057445,
+      "verdict": "ADDS-VALUE",
+      "verdict_in_A14b": "ADDS-VALUE (nominal; outside Family A, no BH applied)"
+    },
+    "cytolytic": {
+      "lr_p": 0.0034785340447108723,
+      "p_entering_bh": 0.0034785340447108723,
+      "bh_q": 0.023007504489124662,
+      "residual": 0.623109640831758,
+      "residual_ci": [
+        0.5463393037680013,
+        0.6990271425940057
+      ],
+      "marginal": 0.6711562696912413,
+      "r2_on_axes": 0.15756948077787047,
+      "verdict": "ADDS-VALUE",
+      "verdict_in_A14b": "ADDS-VALUE (nominal; outside Family A, no BH applied)"
+    },
+    "HRD": {
+      "lr_p": 0.4134495139221861,
+      "p_entering_bh": 0.4134495139221861,
+      "bh_q": 0.5384402701174497,
+      "residual": 0.478182104599874,
+      "residual_ci": [
+        0.39748060278281094,
+        0.5528934920097632
+      ],
+      "marginal": 0.5756143667296787,
+      "r2_on_axes": 0.7419714027486564,
+      "verdict": "NO-MARGINAL-SIGNAL",
+      "verdict_in_A14b": "NO-MARGINAL-SIGNAL"
+    },
+    "TGFBstrom": {
+      "lr_p": 0.43075221609395975,
+      "p_entering_bh": 0.43075221609395975,
+      "bh_q": 0.5384402701174497,
+      "residual": 0.5337901701323251,
+      "residual_ci": [
+        0.4551696754110896,
+        0.6150735294117644
+      ],
+      "marginal": 0.48322306238185253,
+      "r2_on_axes": 0.13287019381340404,
+      "verdict": "NO-MARGINAL-SIGNAL",
+      "verdict_in_A14b": "NO-MARGINAL-SIGNAL"
+    }
+  },
+  "adds_value_cells": [
+    "DoxVariant",
+    "TIS",
+    "cytolytic"
+  ],
+  "condition_1": {
+    "fires": true,
+    "trigger": "any cell classed ADDS-VALUE: BH q < 0.10 and residual-AUROC 95% CI lower bound > 0.5",
+    "consequence": "The abstract names that signature and cohort explicitly and drops the unqualified \"no signature added detectable value\"."
+  },
+  "ci_provenance": "Cluster-bootstrap percentile intervals carried through from A14b_gse41998_analysis.py (B = 2000, seed 42, section 5.2), unmodified."
+}

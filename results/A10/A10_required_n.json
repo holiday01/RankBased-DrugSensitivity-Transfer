@@ -1,0 +1,15 @@
+{
+  "0.55": {
+    "required_n_80pct": 560,
+    "power_at_required": 0.8325
+  },
+  "0.6": {
+    "required_n_80pct": 146,
+    "power_at_required": 0.8225
+  },
+  "largest_public_cohort": {
+    "name": "GSE25066",
+    "n": 488,
+    "note": "No public neoadjuvant pCR cohort reaches the n required to exclude a residual AUROC of 0.55 at 80% power. This is the study-design recommendation the power limitation converts into."
+  }
+}

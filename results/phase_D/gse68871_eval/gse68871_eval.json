@@ -1,0 +1,145 @@
+{
+  "started_utc": "2026-06-10T23:41:52.593556+00:00",
+  "cohort": "GSE68871",
+  "expr_genes": 22187,
+  "response_distribution": {
+    "PR": 42,
+    "VGPR": 40,
+    "CR": 15,
+    "NCR": 14,
+    "SD": 7
+  },
+  "n_samples": 118,
+  "by_threshold": {
+    "primary_geVGPR": {
+      "n_responder": 69,
+      "n_nonresponder": 49,
+      "responder_rate": 0.5847457627118644,
+      "signatures": {
+        "pan_cancer": {
+          "auroc": 0.45075421472937,
+          "ci_low": 0.34417395390650535,
+          "ci_high": 0.5602607244702638,
+          "n_up_present": 29,
+          "n_down_present": 29
+        },
+        "heme_matched": {
+          "auroc": 0.4785566400473233,
+          "ci_low": 0.37514191434845523,
+          "ci_high": 0.589529301250767,
+          "n_up_present": 29,
+          "n_down_present": 27
+        }
+      },
+      "baselines": {
+        "MKI67": {
+          "auroc": 0.59597752144336,
+          "ci_low": 0.49162804841889374,
+          "ci_high": 0.6975445331695331
+        },
+        "TNFRSF17": {
+          "auroc": 0.5730553090801538,
+          "ci_low": 0.46506324404761906,
+          "ci_high": 0.6748967722100281
+        },
+        "IRF4": {
+          "auroc": 0.49571132800946466,
+          "ci_low": 0.3880577862499099,
+          "ci_high": 0.5999447628619398
+        },
+        "PSMB5": {
+          "auroc": 0.5368234250221828,
+          "ci_low": 0.43170452606299736,
+          "ci_high": 0.6399046948942618
+        }
+      }
+    },
+    "sens_CRnCR": {
+      "n_responder": 29,
+      "n_nonresponder": 89,
+      "responder_rate": 0.2457627118644068,
+      "signatures": {
+        "pan_cancer": {
+          "auroc": 0.4703603254552499,
+          "ci_low": 0.3467604720686133,
+          "ci_high": 0.5972529174448554,
+          "n_up_present": 29,
+          "n_down_present": 29
+        },
+        "heme_matched": {
+          "auroc": 0.4486633087950407,
+          "ci_low": 0.3442857142857143,
+          "ci_high": 0.5611732155113247,
+          "n_up_present": 29,
+          "n_down_present": 27
+        }
+      },
+      "baselines": {
+        "MKI67": {
+          "auroc": 0.5335141418055017,
+          "ci_low": 0.4091920731707317,
+          "ci_high": 0.6552809343434344
+        },
+        "TNFRSF17": {
+          "auroc": 0.6216582719876017,
+          "ci_low": 0.514873256071455,
+          "ci_high": 0.7379007830969266
+        },
+        "IRF4": {
+          "auroc": 0.5308020147229755,
+          "ci_low": 0.40643739144594015,
+          "ci_high": 0.6471905835646007
+        },
+        "PSMB5": {
+          "auroc": 0.48314606741573035,
+          "ci_low": 0.3640572858731924,
+          "ci_high": 0.614878015722418
+        }
+      }
+    },
+    "sens_gePR": {
+      "n_responder": 111,
+      "n_nonresponder": 7,
+      "responder_rate": 0.940677966101695,
+      "signatures": {
+        "pan_cancer": {
+          "auroc": 0.3680823680823681,
+          "ci_low": 0.1663096116027532,
+          "ci_high": 0.5787847890214185,
+          "n_up_present": 29,
+          "n_down_present": 29
+        },
+        "heme_matched": {
+          "auroc": 0.43500643500643504,
+          "ci_low": 0.22029869154869156,
+          "ci_high": 0.644250223872735,
+          "n_up_present": 29,
+          "n_down_present": 27
+        }
+      },
+      "baselines": {
+        "MKI67": {
+          "auroc": 0.48391248391248387,
+          "ci_low": 0.28235214244388557,
+          "ci_high": 0.6814564238305941
+        },
+        "TNFRSF17": {
+          "auroc": 0.5733590733590733,
+          "ci_low": 0.39905917136591473,
+          "ci_high": 0.7380860163868213
+        },
+        "IRF4": {
+          "auroc": 0.5366795366795367,
+          "ci_low": 0.3420136634199134,
+          "ci_high": 0.724222888555722
+        },
+        "PSMB5": {
+          "auroc": 0.5180180180180181,
+          "ci_low": 0.3873487204018178,
+          "ci_high": 0.6644736842105263
+        }
+      }
+    }
+  },
+  "finished_utc": "2026-06-10T23:41:59.714473+00:00"
+}

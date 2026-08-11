@@ -1,0 +1,402 @@
+{
+  "n_pairs": 66,
+  "pearson_r": 0.6190869715308018,
+  "pairs": [
+    {
+      "a": "DOXORUBICIN",
+      "b": "ETOPOSIDE",
+      "nes_corr": 0.970261624542209,
+      "score_corr": 0.7588920602114958
+    },
+    {
+      "a": "DOXORUBICIN",
+      "b": "PACLITAXEL",
+      "nes_corr": 0.9351491420538516,
+      "score_corr": 0.4648067554911892
+    },
+    {
+      "a": "DOXORUBICIN",
+      "b": "CARBOPLATIN",
+      "nes_corr": 0.8831228138445746,
+      "score_corr": 0.7928415729044915
+    },
+    {
+      "a": "DOXORUBICIN",
+      "b": "CYCLOPHOSPHAMIDE",
+      "nes_corr": -0.680176202129743,
+      "score_corr": -0.0881738483764532
+    },
+    {
+      "a": "DOXORUBICIN",
+      "b": "FLUOROURACIL",
+      "nes_corr": 0.6838919575189893,
+      "score_corr": -0.2589178327973594
+    },
+    {
+      "a": "DOXORUBICIN",
+      "b": "TOP2_consensus",
+      "nes_corr": 0.997772460818681,
+      "score_corr": 0.8228031997239524
+    },
+    {
+      "a": "DOXORUBICIN",
+      "b": "TRAMETINIB",
+      "nes_corr": -0.6496836952180931,
+      "score_corr": -0.4437147298882624
+    },
+    {
+      "a": "DOXORUBICIN",
+      "b": "GEFITINIB",
+      "nes_corr": -0.6026316471186383,
+      "score_corr": -0.4144896335051632
+    },
+    {
+      "a": "DOXORUBICIN",
+      "b": "LAPATINIB",
+      "nes_corr": -0.35385649210751935,
+      "score_corr": -0.3819056593837219
+    },
+    {
+      "a": "DOXORUBICIN",
+      "b": "FULVESTRANT",
+      "nes_corr": 0.5086671445222084,
+      "score_corr": -0.2955562216063475
+    },
+    {
+      "a": "DOXORUBICIN",
+      "b": "IMATINIB",
+      "nes_corr": 0.5373866169105008,
+      "score_corr": 0.5319210887523367
+    },
+    {
+      "a": "ETOPOSIDE",
+      "b": "PACLITAXEL",
+      "nes_corr": 0.9114121417776452,
+      "score_corr": 0.4726416059018035
+    },
+    {
+      "a": "ETOPOSIDE",
+      "b": "CARBOPLATIN",
+      "nes_corr": 0.8484546453168638,
+      "score_corr": 0.6527621279580854
+    },
+    {
+      "a": "ETOPOSIDE",
+      "b": "CYCLOPHOSPHAMIDE",
+      "nes_corr": -0.7339628912442625,
+      "score_corr": -0.0619541977496275
+    },
+    {
+      "a": "ETOPOSIDE",
+      "b": "FLUOROURACIL",
+      "nes_corr": 0.6326392095774053,
+      "score_corr": -0.4135237692542996
+    },
+    {
+      "a": "ETOPOSIDE",
+      "b": "TOP2_consensus",
+      "nes_corr": 0.9792119250308207,
+      "score_corr": 0.9004032758224338
+    },
+    {
+      "a": "ETOPOSIDE",
+      "b": "TRAMETINIB",
+      "nes_corr": -0.6896142292046924,
+      "score_corr": -0.6463476758414579
+    },
+    {
+      "a": "ETOPOSIDE",
+      "b": "GEFITINIB",
+      "nes_corr": -0.6429395637483325,
+      "score_corr": -0.6024169037685333
+    },
+    {
+      "a": "ETOPOSIDE",
+      "b": "LAPATINIB",
+      "nes_corr": -0.3999842861074414,
+      "score_corr": -0.540912345931071
+    },
+    {
+      "a": "ETOPOSIDE",
+      "b": "FULVESTRANT",
+      "nes_corr": 0.49127927726118176,
+      "score_corr": -0.278854092927435
+    },
+    {
+      "a": "ETOPOSIDE",
+      "b": "IMATINIB",
+      "nes_corr": 0.5768941866563684,
+      "score_corr": 0.4076297213262695
+    },
+    {
+      "a": "PACLITAXEL",
+      "b": "CARBOPLATIN",
+      "nes_corr": 0.8516071760624011,
+      "score_corr": 0.3892311364025542
+    },
+    {
+      "a": "PACLITAXEL",
+      "b": "CYCLOPHOSPHAMIDE",
+      "nes_corr": -0.6801910466716442,
+      "score_corr": -0.3262194425351733
+    },
+    {
+      "a": "PACLITAXEL",
+      "b": "FLUOROURACIL",
+      "nes_corr": 0.7626577530112036,
+      "score_corr": 0.2265681085468089
+    },
+    {
+      "a": "PACLITAXEL",
+      "b": "TOP2_consensus",
+      "nes_corr": 0.9358895235517808,
+      "score_corr": 0.5217406667360268
+    },
+    {
+      "a": "PACLITAXEL",
+      "b": "TRAMETINIB",
+      "nes_corr": -0.5869621933293327,
+      "score_corr": -0.3005917237805415
+    },
+    {
+      "a": "PACLITAXEL",
+      "b": "GEFITINIB",
+      "nes_corr": -0.4687366423014373,
+      "score_corr": 0.0884027245413509
+    },
+    {
+      "a": "PACLITAXEL",
+      "b": "LAPATINIB",
+      "nes_corr": -0.2234659617615381,
+      "score_corr": 0.1402927125453275
+    },
+    {
+      "a": "PACLITAXEL",
+      "b": "FULVESTRANT",
+      "nes_corr": 0.4662852747379504,
+      "score_corr": -0.069163115155593
+    },
+    {
+      "a": "PACLITAXEL",
+      "b": "IMATINIB",
+      "nes_corr": 0.4539913106299677,
+      "score_corr": 0.2844988713034471
+    },
+    {
+      "a": "CARBOPLATIN",
+      "b": "CYCLOPHOSPHAMIDE",
+      "nes_corr": -0.6423386887981491,
+      "score_corr": -0.0373484334249443
+    },
+    {
+      "a": "CARBOPLATIN",
+      "b": "FLUOROURACIL",
+      "nes_corr": 0.6820847535128479,
+      "score_corr": -0.2229944957166175
+    },
+    {
+      "a": "CARBOPLATIN",
+      "b": "TOP2_consensus",
+      "nes_corr": 0.8786161313316533,
+      "score_corr": 0.6475595361971829
+    },
+    {
+      "a": "CARBOPLATIN",
+      "b": "TRAMETINIB",
+      "nes_corr": -0.5492795560011154,
+      "score_corr": -0.3904528756786097
+    },
+    {
+      "a": "CARBOPLATIN",
+      "b": "GEFITINIB",
+      "nes_corr": -0.4478249509044908,
+      "score_corr": -0.4491755015009891
+    },
+    {
+      "a": "CARBOPLATIN",
+      "b": "LAPATINIB",
+      "nes_corr": -0.180295776512527,
+      "score_corr": -0.3680773599983466
+    },
+    {
+      "a": "CARBOPLATIN",
+      "b": "FULVESTRANT",
+      "nes_corr": 0.5729571313034515,
+      "score_corr": -0.2184877401235866
+    },
+    {
+      "a": "CARBOPLATIN",
+      "b": "IMATINIB",
+      "nes_corr": 0.43160738401934035,
+      "score_corr": 0.5462389123906939
+    },
+    {
+      "a": "CYCLOPHOSPHAMIDE",
+      "b": "FLUOROURACIL",
+      "nes_corr": -0.5303735130256872,
+      "score_corr": -0.2063194033455003
+    },
+    {
+      "a": "CYCLOPHOSPHAMIDE",
+      "b": "TOP2_consensus",
+      "nes_corr": -0.7000529630001125,
+      "score_corr": -0.0682624527646594
+    },
+    {
+      "a": "CYCLOPHOSPHAMIDE",
+      "b": "TRAMETINIB",
+      "nes_corr": 0.6243076191682279,
+      "score_corr": 0.0298299914126219
+    },
+    {
+      "a": "CYCLOPHOSPHAMIDE",
+      "b": "GEFITINIB",
+      "nes_corr": 0.5411968541482829,
+      "score_corr": -0.1859665733580331
+    },
+    {
+      "a": "CYCLOPHOSPHAMIDE",
+      "b": "LAPATINIB",
+      "nes_corr": 0.3265631832978571,
+      "score_corr": -0.2399993508813203
+    },
+    {
+      "a": "CYCLOPHOSPHAMIDE",
+      "b": "FULVESTRANT",
+      "nes_corr": -0.2801011553596624,
+      "score_corr": 0.0344311637326973
+    },
+    {
+      "a": "CYCLOPHOSPHAMIDE",
+      "b": "IMATINIB",
+      "nes_corr": -0.6623161501544235,
+      "score_corr": -0.1667875587643032
+    },
+    {
+      "a": "FLUOROURACIL",
+      "b": "TOP2_consensus",
+      "nes_corr": 0.6725366043990123,
+      "score_corr": -0.3530566441182619
+    },
+    {
+      "a": "FLUOROURACIL",
+      "b": "TRAMETINIB",
+      "nes_corr": -0.280509450897538,
+      "score_corr": 0.4448643380714547
+    },
+    {
+      "a": "FLUOROURACIL",
+      "b": "GEFITINIB",
+      "nes_corr": -0.1068219160639921,
+      "score_corr": 0.7764589243251226
+    },
+    {
+      "a": "FLUOROURACIL",
+      "b": "LAPATINIB",
+      "nes_corr": 0.15523526568663343,
+      "score_corr": 0.8670701209965402
+    },
+    {
+      "a": "FLUOROURACIL",
+      "b": "FULVESTRANT",
+      "nes_corr": 0.4434200018141403,
+      "score_corr": 0.466524731191899
+    },
+    {
+      "a": "FLUOROURACIL",
+      "b": "IMATINIB",
+      "nes_corr": 0.3349071828708988,
+      "score_corr": 0.1042413248860109
+    },
+    {
+      "a": "TOP2_consensus",
+      "b": "TRAMETINIB",
+      "nes_corr": -0.6656793321133957,
+      "score_corr": -0.5532606236125946
+    },
+    {
+      "a": "TOP2_consensus",
+      "b": "GEFITINIB",
+      "nes_corr": -0.6211308837448706,
+      "score_corr": -0.4901001086536667
+    },
+    {
+      "a": "TOP2_consensus",
+      "b": "LAPATINIB",
+      "nes_corr": -0.3756636370653011,
+      "score_corr": -0.4680473701535124
+    },
+    {
+      "a": "TOP2_consensus",
+      "b": "FULVESTRANT",
+      "nes_corr": 0.5018724495627397,
+      "score_corr": -0.2916814142173092
+    },
+    {
+      "a": "TOP2_consensus",
+      "b": "IMATINIB",
+      "nes_corr": 0.5512664957371108,
+      "score_corr": 0.3609856112107721
+    },
+    {
+      "a": "TRAMETINIB",
+      "b": "GEFITINIB",
+      "nes_corr": 0.7802427848495133,
+      "score_corr": 0.5728411029398448
+    },
+    {
+      "a": "TRAMETINIB",
+      "b": "LAPATINIB",
+      "nes_corr": 0.5809825560786203,
+      "score_corr": 0.4463322241575753
+    },
+    {
+      "a": "TRAMETINIB",
+      "b": "FULVESTRANT",
+      "nes_corr": -0.48028601800709825,
+      "score_corr": -0.099151064460466
+    },
+    {
+      "a": "TRAMETINIB",
+      "b": "IMATINIB",
+      "nes_corr": -0.5909931698909803,
+      "score_corr": -0.241243232750086
+    },
+    {
+      "a": "GEFITINIB",
+      "b": "LAPATINIB",
+      "nes_corr": 0.8442924798406143,
+      "score_corr": 0.9150819789510825
+    },
+    {
+      "a": "GEFITINIB",
+      "b": "FULVESTRANT",
+      "nes_corr": -0.2942496380058001,
+      "score_corr": 0.3164647482367881
+    },
+    {
+      "a": "GEFITINIB",
+      "b": "IMATINIB",
+      "nes_corr": -0.6161223305389544,
+      "score_corr": -0.188995230040425
+    },
+    {
+      "a": "LAPATINIB",
+      "b": "FULVESTRANT",
+      "nes_corr": 0.03654905365429931,
+      "score_corr": 0.5163630588184944
+    },
+    {
+      "a": "LAPATINIB",
+      "b": "IMATINIB",
+      "nes_corr": -0.5204126528724082,
+      "score_corr": -0.058287610262268
+    },
+    {
+      "a": "FULVESTRANT",
+      "b": "IMATINIB",
+      "nes_corr": 0.22393121836654148,
+      "score_corr": 0.0476692860991219
+    }
+  ]
+}
